@@ -1,5 +1,8 @@
 package application;
 
+/*
+ * Esialgu jätab selle kõrvale ja lisab kolmandaks projektiks
+ */
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -7,10 +10,13 @@ import java.util.TimerTask;
 public class Taimer {
 	static int intervall;
 	static Timer taimer;
-	static int aeg = 10; 
+	static int aeg = 10;
 	
 	public static void main(String[] args) {
 		alusta();
+	}
+	public void stopp() {
+		taimer.cancel();
 	}
 	public static void alusta() {
 		int delay = 1000;
@@ -22,6 +28,7 @@ public class Taimer {
 
 			public void run() {
 				System.out.println(setIntervall());
+				aeg = setIntervall();
 
 			}
 		}, delay, period);
