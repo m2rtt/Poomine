@@ -12,7 +12,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,500, Color.AZURE);
+			Scene scene = new Scene(root, 400, 500, Color.AZURE);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -20,6 +20,8 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	///sgssgsg
 	public static void main(String[] args) {
 		launch(args);
 	}
