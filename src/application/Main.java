@@ -31,7 +31,7 @@ public class Main extends Application {
 	public void runn() {
 			root.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 public void handle(final KeyEvent keyEvent) {
-                        System.out.println(keyEvent.getCode());
+                        System.out.println(keyEvent.getText());
                         keyEvent.consume();
                     
                 }
