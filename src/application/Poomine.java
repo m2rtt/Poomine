@@ -3,13 +3,21 @@ package application;
 
 import java.io.FileNotFoundException;
 
-public class Poomine {
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+
+public class Poomine extends Main {
 	static final int lõpp = 10;   
     private int errors;
-    String sõna;
+    public String sõna;
     private static String[] sõnalist;
+    public static String pakutudtäht;
     
-    public static void faililugeja() throws FileNotFoundException{
+    
+    //loeb failist sõnad listi
+    public static void faililugeja() throws FileNotFoundException {
 		
 		java.io.File fail = new java.io.File("sõnad.txt"); 
 		java.util.Scanner sc = new java.util.Scanner(fail);
@@ -19,56 +27,119 @@ public class Poomine {
 		    sõnalist[counter] = rida;
 		    counter+=1;
 		}
+		sc.close();
 	}
     
     public void mängi() {
-    	
+    	//genereerib random sõna listist
     	int arv = (int) Math.random()*(sõnalist.length)+0;
     	sõna = sõnalist[arv];
-    	
+    	//loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab canvasele trükkida, hiljem muudab neid -> _ tähtedeks
     	char tähed[] = new char[sõna.length()];
         for (int i=0; i<sõna.length(); i++) {
                 tähed[i] = '_';
         }
+
     }
     
     public void kontrolli() {
 
-        char pakutudtäht = 0;
         
-        //   
+        //kui täht ei leidu sõnas siis errors +1
         if (sõna.indexOf(pakutudtäht) == -1){
-
                 errors++;
+                          
                 if (errors == lõpp){
-                	//mängu lõpp kuna erroreid liiga palju
+                	//mängu lõpp kuna erroreid liiga palju (errors = 10)
 
-                }
-                
-                return;
+                }    
         }
 
-        //asendab '_' tähtedega
+        //asendab '_' tähtedega kui need sõnas leiduvad
+        char pakutudtäht2 = pakutudtäht.charAt(0);
 
         for (int i=0; i < sõna.length(); i++){
-                if (sõna.charAt(i) == pakutudtäht){
+                if (sõna.charAt(i) == pakutudtäht2){
                 	StringBuilder str = new StringBuilder(sõna);
-                    str.setCharAt(i, pakutudtäht);
+                    str.setCharAt(i, pakutudtäht2);
                 	sõna = str.toString();
-
                 }
         }
 
         // kui kõik tähed on arvatud
         String t = new String(sõna);
         if (t.indexOf('_') == -1){
-        	//võitsid
+        	//võitsid ja teeb midagi
         }
         
     }
-    public void joonista() {
-    	//joonistab hangmani
+    
+    public void joonista(int errors) {
+    	//joonistab hangmani errorite kaupa
+    	//errors=1 siis teeb esimese asja
+    	//errors =2 siis teeb teise
+    	//jne
+    	Circle pea = new Circle();
+    	if(errors == 1) {
+
+             pea.setCenterX(250);
+             pea.setCenterY(290);
+             pea.setRadius(10);
+             root.getChildren().add(pea);
+
+    	}
+
+    	if(errors == 2) {
+    		Line keha = new Line(250, 300, 250, 350);
+            keha.setStrokeWidth(3);
+            keha.setStroke(Color.BLACK);
+            root.getChildren().add(keha);
+            
+
+    	}
+    	if(errors == 3) {
+    		Line vasakkäsi = new Line(250, 320, 220, 290);
+    		vasakkäsi.setStrokeWidth(5);
+    		vasakkäsi.setStroke(Color.BLACK);
+            root.getChildren().add(vasakkäsi);
+            
+
+    	}
+    	if(errors == 4) {
+    		 Line paremkäsi = new Line(250, 320, 280, 290);
+    		 paremkäsi.setStrokeWidth(5);
+    		 paremkäsi.setStroke(Color.BLACK);
+             root.getChildren().add(paremkäsi);
+            
+
+    	}
+    	if(errors == 5) {
+            Line vasakjalg = new Line(250, 350, 220, 380);
+            vasakjalg.setStrokeWidth(5);
+            vasakjalg.setStroke(Color.BLACK);
+            root.getChildren().add(vasakjalg);
+
+    	}
+
+    	if(errors == 6) {
+    		Line paremjalg = new Line(250, 350, 280, 380);
+    		paremjalg.setStrokeWidth(5);
+    		paremjalg.setStroke(Color.BLACK);
+            root.getChildren().add(paremjalg);
+            
+
+    	}
+    	if(errors == 7) {
+    		pea.setFill(Color.RED);
+            pea.setStroke(Color.ORANGE);
+            pea.setStrokeWidth(2);
+            
+
+    	}	
     }
+
+
+    
     public boolean kasTäht(char t) {
     	/*
     	 * kui vajutatud täht eksisteerib sõnas
