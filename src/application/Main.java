@@ -32,7 +32,7 @@ public class Main extends Application {
 	Canvas canvas = new Canvas(400, 400);
 	private Mangija playa;
 	private Taimer taimer;
-	protected FlowPane root;
+	protected static FlowPane root;
 	
 	// see asi töötab isegi jou
 	public void runn() {
@@ -45,7 +45,7 @@ public class Main extends Application {
                 }
             });
 	}
-	private VBox getNupud() {
+	/*private VBox getNupud() {
 		VBox nupud = new VBox();
 		Button start = new Button("Alusta");
 		start.setLayoutX(0); 
@@ -61,31 +61,49 @@ public class Main extends Application {
 			public void handle(ActionEvent arg0) {
 				/*
 				 * alustab mängu
-				 */
+				 
 			}
 		});
 		
 		return nupud;
 	}
+	*/
 	
 	
     
 	@Override
-	public void start(Stage lava) {		
+	public void start(Stage lava) {	
+		
 		lava.setTitle("Poomine");
+		Label pealkiri = new Label("Hangman");
+		pealkiri.setFont(Font.font ("Verdana", 40));
+		
 		root = new FlowPane();
 		root.setLayoutX(20);
 		root.setLayoutY(20);
-		Text tekst = new Text("Hangman");
-        tekst.setFont(Font.font ("Verdana", 40));
-		root.getChildren().add(getNupud());
 		
-		root.getChildren().add(tekst);
+		Button start = new Button("Alusta");
+		Button abi = new Button("Abi");
 		
-		root.getChildren().add(canvas);
+		FlowPane nupud = new FlowPane(50, 50);
+	    nupud.setAlignment(Pos.CENTER);
+	    nupud.getChildren().addAll(start, abi);
+	    
+	    
+	    
+	    VBox kokku = new VBox(10);
+	    kokku.setAlignment(Pos.CENTER);
+	    kokku.getChildren().addAll(pealkiri, nupud);
+
+		root.getChildren().add(kokku);
+		//prooviks laseb välja joonistada
+		Poomine.joonista(7);
+
+
 		
 		
-		Scene scene = new Scene(root, 500, 500, Color.SNOW);
+		
+		Scene scene = new Scene(root, 500, 600, Color.SNOW);
 		runn();
 		lava.setResizable(false);
 		lava.setScene(scene);
