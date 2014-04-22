@@ -69,5 +69,12 @@ public class Poomine {
     public void joonista() {
     	//joonistab hangmani
     }
+    public boolean kasTäht(char t) {
+    	/*
+    	 * kui vajutatud täht eksisteerib sõnas
+    	 * siis returnib 'true', else 'false'
+    	 */
+    	return true;
+    }
 
 }

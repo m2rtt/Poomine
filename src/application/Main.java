@@ -8,6 +8,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -20,10 +22,21 @@ import javafx.scene.paint.Color;
 
 public class Main extends Application {
 	
-	private Canvas canvas = new Canvas(300, 300);
+	private Canvas canvas = new Canvas(400, 400);
 	private Mangija playa;
 	private Taimer taimer;
+	private FlowPane root;
 	
+	// see asi töötab isegi jou
+	public void runn() {
+			root.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                public void handle(final KeyEvent keyEvent) {
+                        System.out.println(keyEvent.getCode());
+                        keyEvent.consume();
+                    
+                }
+            });
+	}
 	private VBox getNupud() {
 		VBox nupud = new VBox();
 		Button start = new Button("Alusta");
@@ -34,7 +47,9 @@ public class Main extends Application {
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				
+				/*
+				 * alustab mängu
+				 */
 			}
 		});
 		
@@ -43,11 +58,13 @@ public class Main extends Application {
 	@Override
 	public void start(Stage lava) {		
 		lava.setTitle("Poomine");
-		FlowPane root = new FlowPane();
+		root = new FlowPane();
 		root.setLayoutX(100);
 		root.setLayoutY(150);
 		root.getChildren().add(getNupud());
+		root.getChildren().add(canvas);
 		Scene scene = new Scene(root, 400, 400, Color.SNOW);
+		runn();
 		lava.setResizable(false);
 		lava.setScene(scene);
 		lava.show();

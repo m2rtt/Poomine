@@ -12,4 +12,7 @@ public class Mangija {
 	void setSkoor(int skoor) {
 		this.skoor = skoor;
 	}
+	public boolean isPlaying() {
+		return true;
+	}
 }
