@@ -1,6 +1,11 @@
 package application;
 
 class ValeTaheErind extends Exception {
+	/**
+	 * sai vähemalt hüüumärgist lahti
+	 */
+	private static final long serialVersionUID = 1L;
+
 	ValeTaheErind() {
 		super();
 	}
@@ -28,15 +33,8 @@ public class Kontroll extends Main {
 
 	static public String Asendakriipsud(String sõna, String sõnakriipsudena, String pakutudtäht){
 		// asendab '_' tähtedega kui need sõnas leiduvad
-		// char pakutudtäht2 = pakutudtäht.charAt(0);
 		StringBuilder uus1 = new StringBuilder(sõna);
 		StringBuilder uus2 = new StringBuilder(sõnakriipsudena);
-		/*
-		 * for (int i = 0; i < sõnakriipsudena.length(); i++) { StringBuilder
-		 * str = new StringBuilder(sõnakriipsudena); if
-		 * (sõnakriipsudena.charAt(i) == pakutudtäht2) { str.setCharAt(i,
-		 * pakutudtäht2); } sõnakriipsudena = str.toString(); }
-		 */
 		while (uus1.indexOf(pakutudtäht) != -1) {
 			
 			int täheindeks = uus1.indexOf(pakutudtäht);

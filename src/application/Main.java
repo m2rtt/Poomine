@@ -9,32 +9,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 public class Main extends Application {
 	private int errors;
@@ -42,7 +28,7 @@ public class Main extends Application {
 	public String sõna = "";
 	private boolean kasTöötab = false;
 	protected static ArrayList<String> vihjelist = new ArrayList<String>();
-	protected static ArrayList<String> sõnalistt = new ArrayList<String>();
+	protected static ArrayList<String> sõnalist = new ArrayList<String>();
 	// private static String[] sõnalist;
 	public static String pakutudtäht;
 	public String sõnakriipsudena = "";
@@ -50,10 +36,9 @@ public class Main extends Application {
 	double x = 1;
 
 	static Pane joonis = new Pane();
-	private Mangija playa;
-	private Taimer taimer;
+	//private Mangija playa; // veel ei kasuta
+	//private Taimer taimer; // veel ei kasuta
 	protected static AnchorPane root;
-	
 
 	// algväärtustamine
 	public void resetGame() {
@@ -64,34 +49,19 @@ public class Main extends Application {
 		pakutudtäht = "";
 		errors = 0;
 		Poomine.resetJoonista();
-		
+
 	}
-
-	// see asi töötab isegi jou
-	public void runn() {
-		root.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			public void handle(final KeyEvent keyEvent) {
-				pakutudtäht = keyEvent.getText();
-				System.out.println(keyEvent.getText());
-				keyEvent.consume();
-
-			}
-		});
-	}
-
-	// loeb failist sõnad listi
 
 	@Override
 	public void start(Stage lava) {
-
-		lava.setTitle("Poomine");
 
 		// luuakse juur
 		AnchorPane anchorpane = new AnchorPane();
 
 		// mängu nimi
-		Label pealkiri = new Label("Hangman");
-		pealkiri.setFont(Font.font("Verdana", 40));
+		Label pealkiri = new Label("Poomismäng");
+		pealkiri.setFont(Font.font("Arial Bold", 40));
+		;
 		AnchorPane.setTopAnchor(pealkiri, 10.0);
 		AnchorPane.setLeftAnchor(pealkiri, 10.0);
 
@@ -112,7 +82,7 @@ public class Main extends Application {
 
 		// tekst mänguseisu jaoks(arvatav sõna, valesid jne)
 		final Label tekst = new Label("Arvatav sõna: \nVihje: \nTähed: ");
-		tekst.setFont(Font.font("Verdana", 20));
+		tekst.setFont(Font.font("Century Gothic", 20));
 		AnchorPane.setTopAnchor(tekst, 70.0);
 		AnchorPane.setRightAnchor(tekst, 10.0);
 
@@ -120,70 +90,54 @@ public class Main extends Application {
 		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst);
 
 		// poomispost
-		//AnchorPane poomispost = new AnchorPane();
-		final Rectangle alus = new Rectangle(20, 500, 120, 30);
+		Rectangle alus = new Rectangle(10, 460, 140, 20);
 		alus.setFill(Color.BROWN);
-		//AnchorPane.setBottomAnchor(alus, 20.0);
-		//AnchorPane.setLeftAnchor(alus, 20.0);
-		//poomispost.getChildren().add(alus);
-		//joonis.getChildren().add(alus);
-		final Rectangle post = new Rectangle(55, 20, 25, 480);
+		
+		Rectangle post = new Rectangle(55, 20, 20, 450);
 		post.setFill(Color.BROWN);
-		//joonis.getChildren().add(post);
-		final Rectangle ots = new Rectangle(55, 20, 250, 25);
+		
+		Rectangle ots = new Rectangle(55, 20, 200, 20);
 		ots.setFill(Color.BROWN);
-		//joonis.getChildren().add(ots);
+		
 		Line osa = new Line(65, 130, 150, 30);
 		osa.setStrokeWidth(10);
 		osa.setStroke(Color.BROWN);
-		//joonis.getChildren().add(osa);
-		Rectangle otsalla = new Rectangle(305, 20, 25, 60);
+		
+		Rectangle otsalla = new Rectangle(250, 20, 20, 60);
 		otsalla.setFill(Color.BROWN);
-		//joonis.getChildren().add(otsalla);
+		
 		Group poomispost = new Group();
-		poomispost.getChildren().addAll(alus,post,ots,osa,otsalla);
+		poomispost.getChildren().addAll(alus, post, ots, osa, otsalla);
+		
 		joonis.getChildren().add(poomispost);
-		
-		joonis.heightProperty().addListener(new ChangeListener<Object>(){
-            public void changed(final ObservableValue<?> o, final Object vana1, final Object uus1){
-            	final double y1 = (double) uus1;
-            	y = y1/600.0;
-            	
-            	alus.setHeight(y*30);
-            	alus.setY(y*500);
-            	post.setHeight(y*480);
-            	ots.setHeight(y*25);
-            	ots.setY(y*20);
 
-            	
+		/* Hetkel ei oska midagi mõistlikku peale hakata sellega
+		joonis.heightProperty().addListener(new ChangeListener<Object>() {
+			@Override
+			public void changed(final ObservableValue<?> o, final Object vana1, final Object uus1) {
+				final double y1 = (double) uus1;
+				y = y1 / 600.0;
+			}
+		});
+		joonis.widthProperty().addListener(new ChangeListener<Object>() {
+			@Override
+			public void changed(final ObservableValue<?> o, final Object vana, final Object uus2) {
+				final double x1 = (double) uus2;
+				x = x1 / 600.0;
+			}
+		});
+		*/
 
-           }
-        });
-        joonis.widthProperty().addListener(new ChangeListener<Object>(){
-            public void changed(final ObservableValue<?> o, final Object vana, final Object uus2){
-            	final double x1 = (double) uus2;
-            	x = x1/600.0;
-            	alus.setWidth(x*120);
-            	alus.setY(x*20);
-            	post.setWidth(x*25);
-            	ots.setWidth(x*250);
-            	ots.setX(x*55);
 
-           }
-        });
-
-		Scene scene = new Scene(anchorpane, 600, 600, Color.WHEAT);
-		lava.setScene(scene);
-		lava.show();
-		
 		vihjenupp.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 				if (kasTöötab == true) {
-					vihje = vihjelist.get(sõnalistt.indexOf(sõna));
-					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena + "\nVihje: \n" + vihje
-							+ "\nValitud täht: " + pakutudtäht + "\nErrors: " + errors);
+					vihje = vihjelist.get(sõnalist.indexOf(sõna));
+					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
+							+ "\nVihje: \n" + vihje + "\nValitud täht: "
+							+ pakutudtäht + "\nF: " + errors);
 					System.out.println(vihje);
 				}
 			}
@@ -198,64 +152,76 @@ public class Main extends Application {
 				resetGame(); // algväärtustame muutujad
 				kasTöötab = true; // määrame töötamise tõeseks
 				// sõnakriipsudena = "";
-				System.out.println(sõnalistt.size());
+				System.out.println(sõnalist.size());
 				Random rand = new Random();
-				int arv = rand.nextInt(sõnalistt.size());
-				sõna = sõnalistt.get(arv);
-				System.out.println(sõna);
+				int arv = rand.nextInt(sõnalist.size());
+				sõna = sõnalist.get(arv);
+				//System.out.println(sõna); // näitab, palju neid sõnu üldse listis on
 				// loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab
 				for (int i = 0; i < sõna.length(); i++) {
 					sõnakriipsudena += "_";
 				}
 				errors = 0;
 				pakutudtäht = "";
-				tekst.setText("Arvatav sõna: \n" + sõnakriipsudena + "\nVihje: \n" + vihje + "\nValitud täht: "
-				+ pakutudtäht + "\nErrors: " + errors);
-				
+				tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
+						+ "\nVihje: \n" + vihje + "\nValitud täht: "
+						+ pakutudtäht + "\nVigu: " + errors);
 
 			}
 		});
 
 		// kui tähti vajutatakse siis mis teeb
 		anchorpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
 			public void handle(final KeyEvent keyEvent) {
-				pakutudtäht = keyEvent.getText();
-				System.out.println(keyEvent.getText());
-				keyEvent.consume();
+				if (kasTöötab) {
+					pakutudtäht = keyEvent.getText();
+					System.out.println(keyEvent.getText());
+					keyEvent.consume();
 
-				try {
-					if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
-						sõnakriipsudena = Kontroll.Asendakriipsud(sõna, sõnakriipsudena, pakutudtäht);
+					try {
+						if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
+							sõnakriipsudena = Kontroll.Asendakriipsud(sõna,
+									sõnakriipsudena, pakutudtäht);
 
-					} else {
-						errors++;
+						} else {
+							errors++;
+						}
+					} catch (ValeTaheErind e) {
+						System.out
+								.println("Tekkis erind: seda tähte pole tähestikus või vajutasid shift/tab/alt etc");
 					}
-				} catch (ValeTaheErind e) {
-					System.out.println("Tekkis erind: seda tähte pole tähestikus või vajutasid shift/tab/alt etc");
-				}
 
-				tekst.setText("Arvatav sõna: \n" + sõnakriipsudena + "\nVihje: \n" + vihje
-						+ "\nValitud täht: " + pakutudtäht + "\nErrors: " + errors);
+					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
+							+ "\nVihje: \n" + vihje + "\nValitud täht: "
+							+ pakutudtäht + "\nvigu: " + errors);
 
-				if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
-					// YOU WIN ehk teeb midagi
-					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena + "\nVihje: \n" + vihje + "\nValitud täht: "
-							+ pakutudtäht + "\nErrors: " + errors + "\nSINA VÕITSID!");
-					start.setDisable(false);
-					resetGame();
+					if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
+						// YOU WIN ehk teeb midagi
+						tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
+								+ "\nVihje: \n" + vihje + "\nValitud täht: "
+								+ pakutudtäht + "\nvigu: " + errors
+								+ "\nSINA VÕITSID!");
+						start.setDisable(false);
+						resetGame();
+					}
+					Poomine.joonista(errors);
+					if (errors == 7) {
+						tekst.setText("KAOTASID!\nLiiga palju erroreid!");
+						resetGame();
+						start.setDisable(false);
+					}
 				}
-				Poomine.joonista(errors);
-				if (errors == 7) {
-					tekst.setText("KAOTASID!\nLiiga palju erroreid!");
-					start.setDisable(false);
-				}
-
 			}
 		});
-
-
+		
+		lava.setTitle("Poomine");
+		Scene scene = new Scene(anchorpane, 600, 570, Color.WHEAT);
+		lava.setScene(scene);
+		lava.setMinHeight(600); lava.setMaxHeight(700);
+		lava.setMinWidth(550); lava.setMaxWidth(700);
+		lava.show();
 	}
-
 	public static void main(String[] args) {
 		try {
 			Faililugeja.faililugeja();
