@@ -1,4 +1,4 @@
-mari
-suvi
-päike
-tore
+mari;teisisõnu mammu
+suvi;soe aastaaeg
+päike;meile lähim täht
+tore;vahva
