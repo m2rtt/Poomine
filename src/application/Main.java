@@ -109,8 +109,7 @@ public class Main extends Application {
 		AnchorPane.setRightAnchor(tekst, 10.0);
 
 		// addime kõik eelneva childreniteks
-		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri,
-				tekst);
+		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst);
 
 		// poomispost
 		Rectangle alus = new Rectangle(10, 500, 120, 30);
@@ -137,9 +136,8 @@ public class Main extends Application {
 			public void handle(ActionEvent event) {
 				if (kasTöötab == true) {
 					vihje = vihjelist.get(sõnalistt.indexOf(sõna));
-					tekst.setText("Arvatav sõna: " + sõnakriipsudena
-							+ "\nVihje: " + vihje + "\nValitud täht: "
-							+ pakutudtäht + "\nErrors: " + errors);
+					tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: " + vihje
+							+ "\nValitud täht: " + pakutudtäht + "\nErrors: " + errors);
 					System.out.println(vihje);
 				}
 			}
@@ -166,9 +164,8 @@ public class Main extends Application {
 				}
 				errors = 0;
 				pakutudtäht = "";
-				tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: "
-						+ vihje + "\nValitud täht: " + pakutudtäht
-						+ "\nErrors: " + errors);
+				tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: " + vihje + "\nValitud täht: "
+				+ pakutudtäht + "\nErrors: " + errors);
 
 			}
 		});
@@ -182,30 +179,24 @@ public class Main extends Application {
 
 				try {
 					if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
-						sõnakriipsudena = Kontroll.Asendakriipsud(sõna,
-								sõnakriipsudena, pakutudtäht);
+						sõnakriipsudena = Kontroll.Asendakriipsud(sõna, sõnakriipsudena, pakutudtäht);
 
-						System.out
-								.println("Tekkis erind: Seda tähte pole tähestikus");
+						System.out.println("Tekkis erind: Seda tähte pole tähestikus");
 
 					} else {
 						errors++;
 					}
 				} catch (ValeTaheErind e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Tekkis erind: seda tähte pole tähestikus või vajutasid shift/tab/alt etc");
 				}
 
-				tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: "
-						+ vihje + "\nValitud täht: " + pakutudtäht
-						+ "\nErrors: " + errors);
+				tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: " + vihje
+						+ "\nValitud täht: " + pakutudtäht + "\nErrors: " + errors);
 
 				if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
 					// YOU WIN ehk teeb midagi
-					tekst.setText("Arvatav sõna: " + sõnakriipsudena
-							+ "\nVihje: " + vihje + "\nValitud täht: "
-							+ pakutudtäht + "\nErrors: " + errors
-							+ "\nSINA VÕITSID!");
+					tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: " + vihje + "\nValitud täht: "
+							+ pakutudtäht + "\nErrors: " + errors + "\nSINA VÕITSID!");
 					start.setDisable(false);
 					resetGame();
 				}
