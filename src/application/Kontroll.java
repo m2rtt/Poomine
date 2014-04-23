@@ -17,17 +17,17 @@ public class Kontroll extends Main {
     	return true;
     }
 	}
-    static public String Asendakriipsud(String sõna, String pakutudtäht){
+    static public String Asendakriipsud(String sõnakriipsudena, String pakutudtäht){
     //asendab '_' tähtedega kui need sõnas leiduvad
     char pakutudtäht2 = pakutudtäht.charAt(0);
-    for (int i=0; i < sõna.length(); i++){
-            if (sõna.charAt(i) == pakutudtäht2){
-            	StringBuilder str = new StringBuilder(sõna);
+    for (int i=0; i < sõnakriipsudena.length(); i++){
+            if (sõnakriipsudena.charAt(i) == pakutudtäht2){
+            	StringBuilder str = new StringBuilder(sõnakriipsudena);
                 str.setCharAt(i, pakutudtäht2);
-            	sõna = str.toString();
+            	sõnakriipsudena = str.toString();
             }
     }
-    return sõna;
+    return sõnakriipsudena;
     }
     
     public static boolean KasArvatud(String sõna) {

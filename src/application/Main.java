@@ -2,6 +2,7 @@ package application;
 	
 
 import java.io.FileNotFoundException;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,6 +35,7 @@ public class Main extends Application {
 	 public String sõna;
 	 private static String[] sõnalist;
 	 public static String pakutudtäht;
+	 public String sõnakriipsudena = "";
 
 	
 	Canvas canvas = new Canvas(400, 400);
@@ -45,7 +47,7 @@ public class Main extends Application {
 	public void runn() {
 			root.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 public void handle(final KeyEvent keyEvent) {
-                	Poomine.pakutudtäht = keyEvent.getText();
+                	pakutudtäht = keyEvent.getText();
                     System.out.println(keyEvent.getText());
                     keyEvent.consume();
                     
@@ -125,7 +127,7 @@ public class Main extends Application {
 		
 		Scene scene = new Scene(root, 500, 600, Color.SNOW);
 		
-		
+		//kui start vajutad siis mis juhtub
 		start.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -134,9 +136,8 @@ public class Main extends Application {
 		    	int arv = (int) Math.random()*(sõnalist.length)+0;
 		    	sõna = sõnalist[arv];
 		    	//loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab canvasele trükkida, hiljem muudab neid -> _ tähtedeks
-		    	String sõnakriipsudena = "";
 				for (int i = 0; i < sõna.length(); i++){
-					sõnakriipsudena += "_ ";
+					sõnakriipsudena += "_";
 				}
 		    
 			}
@@ -144,7 +145,28 @@ public class Main extends Application {
 				);
 		
 		
-		runn();
+		//kui tähti vajutatakse siis mis teeb
+		root.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(final KeyEvent keyEvent) {
+            	pakutudtäht = keyEvent.getText();
+                System.out.println(keyEvent.getText());
+                keyEvent.consume();
+                
+                if(Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
+                	sõnakriipsudena = Kontroll.Asendakriipsud(sõna, pakutudtäht);
+                }
+                
+                
+                if(Kontroll.KasArvatud(sõnakriipsudena) == true) {
+                	//YOU WIN ehk teeb midagi
+                }
+                
+                
+                
+            }
+        });
+		
+		
 		lava.setResizable(false);
 		lava.setScene(scene);
 		lava.show();
