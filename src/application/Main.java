@@ -23,6 +23,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 public class Main extends Application {
+
 	private int errors;
 	public String vihje = "";
 	public String sõna = "";
