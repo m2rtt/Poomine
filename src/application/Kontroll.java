@@ -33,6 +33,9 @@ public class Kontroll extends Main {
 		 * (sõnakriipsudena.charAt(i) == pakutudtäht2) { str.setCharAt(i,
 		 * pakutudtäht2); } sõnakriipsudena = str.toString(); }
 		 */
+		if(pakutudtäht.isEmpty()) {
+			throw new ValeTaheErind("Seda tähte ei ole tähestikus");
+		}
 		char t = pakutudtäht.charAt(0);
 		if(tähestik.indexOf(t) == -1) {
 			throw new ValeTaheErind("Seda tähte ei ole tähestikus");

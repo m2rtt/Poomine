@@ -96,7 +96,7 @@ public class Main extends Application {
         AnchorPane.setBottomAnchor(joonis, 10.0);
         
         //nupud alusta ja abi
-        Button start = new Button("Alusta");
+        final Button start = new Button("Alusta");
         AnchorPane.setTopAnchor(start, 10.0);
         AnchorPane.setRightAnchor(start, 10.0);
         final Button vihjenupp = new Button("Vihje");
@@ -151,6 +151,7 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				// genereerib random sõna listist
+				start.setDisable(true);
 				resetGame(); // algväärtustame muutujad
 				kasTöötab = true; // määrame töötamise tõeseks
 				//sõnakriipsudena = "";
@@ -194,11 +195,13 @@ public class Main extends Application {
 				if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
 					// YOU WIN ehk teeb midagi
 					tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: "+vihje+"\nValitud täht: "+pakutudtäht+"\nErrors: "+errors+"\nSINA VÕITSID!");
+					start.setDisable(false);
 					resetGame();
 				}
 				Poomine.joonista(errors);
 				if (errors == 7) {
 					tekst.setText("KAOTASID!\nLiiga palju erroreid!");
+					start.setDisable(false);
 					resetGame();
 				}
 
