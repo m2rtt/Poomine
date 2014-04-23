@@ -121,16 +121,16 @@ public class Main extends Application {
 
 		// poomispost
 		//AnchorPane poomispost = new AnchorPane();
-		final Rectangle alus = new Rectangle(x*120, y*30);
+		final Rectangle alus = new Rectangle(20, 500, 120, 30);
 		alus.setFill(Color.BROWN);
-		AnchorPane.setBottomAnchor(alus, 20.0);
-		AnchorPane.setLeftAnchor(alus, 20.0);
+		//AnchorPane.setBottomAnchor(alus, 20.0);
+		//AnchorPane.setLeftAnchor(alus, 20.0);
 		//poomispost.getChildren().add(alus);
 		//joonis.getChildren().add(alus);
-		final Rectangle post = new Rectangle(x*55, y*20, x*25, y*480);
+		final Rectangle post = new Rectangle(55, 20, 25, 480);
 		post.setFill(Color.BROWN);
-		joonis.getChildren().add(post);
-		Rectangle ots = new Rectangle(55, 20, 250, 25);
+		//joonis.getChildren().add(post);
+		final Rectangle ots = new Rectangle(55, 20, 250, 25);
 		ots.setFill(Color.BROWN);
 		//joonis.getChildren().add(ots);
 		Line osa = new Line(65, 130, 150, 30);
@@ -147,10 +147,14 @@ public class Main extends Application {
 		joonis.heightProperty().addListener(new ChangeListener<Object>(){
             public void changed(final ObservableValue<?> o, final Object vana1, final Object uus1){
             	final double y1 = (double) uus1;
-            	y = y1;
-            	//alus.setY(y1-30);
-            	alus.setHeight(y*0.04);
-            	post.setHeight(y*0.96-20);
+            	y = y1/600.0;
+            	
+            	alus.setHeight(y*30);
+            	alus.setY(y*500);
+            	post.setHeight(y*480);
+            	ots.setHeight(y*25);
+            	ots.setY(y*20);
+
             	
 
            }
@@ -158,12 +162,20 @@ public class Main extends Application {
         joonis.widthProperty().addListener(new ChangeListener<Object>(){
             public void changed(final ObservableValue<?> o, final Object vana, final Object uus2){
             	final double x1 = (double) uus2;
-            	x = 600.0/x1;
+            	x = x1/600.0;
+            	alus.setWidth(x*120);
+            	alus.setY(x*20);
+            	post.setWidth(x*25);
+            	ots.setWidth(x*250);
+            	ots.setX(x*55);
 
            }
         });
 
 		Scene scene = new Scene(anchorpane, 600, 600, Color.WHEAT);
+		lava.setScene(scene);
+		lava.show();
+		
 		vihjenupp.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -236,15 +248,11 @@ public class Main extends Application {
 				if (errors == 7) {
 					tekst.setText("KAOTASID!\nLiiga palju erroreid!");
 					start.setDisable(false);
-					resetGame();
 				}
 
 			}
 		});
 
-		// lava.setResizable(false);
-		lava.setScene(scene);
-		lava.show();
 
 	}
 

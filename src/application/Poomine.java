@@ -26,13 +26,7 @@ public class Poomine extends Main {
 		// errors=1 siis teeb esimese asja
 		// errors =2 siis teeb teise
 		// jne
-		// joonis.getChildren().remove(pea, nöör, keha, vasakkäsi, paremkäsi,
-		// vasakjalg, paremjalg);
-		/*
-		 * Circle pea = new Circle(); Line keha = new Line(); Line nöör = new
-		 * Line(); Line vasakkäsi = new Line(); Line paremkäsi = new Line();
-		 * Line vasakjalg = new Line(); Line paremjalg = new Line();
-		 */
+
 
 		if (errors == 1) {
 
