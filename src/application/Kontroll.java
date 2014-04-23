@@ -12,8 +12,12 @@ class ValeTaheErind extends Exception {
 
 public class Kontroll extends Main {
 	private static String tähestik = "abcdefghijklmnopqrsztuvwõäöüxy";
-	static public boolean KasTähtOnSõnas(String sõna, String pakutudtäht, int errors) {
+	static public boolean KasTähtOnSõnas(String sõna, String pakutudtäht, int errors) throws ValeTaheErind {
 		// kui täht ei leidu sõnas siis errors +1
+		char t = pakutudtäht.charAt(0);
+		if(tähestik.indexOf(t) == -1 || pakutudtäht.isEmpty()) {
+			throw new ValeTaheErind("Seda tähte ei ole tähestikus");
+		}
 		if (sõna.indexOf(pakutudtäht) == -1) {
 
 			return false;
@@ -22,7 +26,7 @@ public class Kontroll extends Main {
 		}
 	}
 
-	static public String Asendakriipsud(String sõna, String sõnakriipsudena, String pakutudtäht) throws ValeTaheErind {
+	static public String Asendakriipsud(String sõna, String sõnakriipsudena, String pakutudtäht){
 		// asendab '_' tähtedega kui need sõnas leiduvad
 		// char pakutudtäht2 = pakutudtäht.charAt(0);
 		StringBuilder uus1 = new StringBuilder(sõna);
@@ -33,13 +37,6 @@ public class Kontroll extends Main {
 		 * (sõnakriipsudena.charAt(i) == pakutudtäht2) { str.setCharAt(i,
 		 * pakutudtäht2); } sõnakriipsudena = str.toString(); }
 		 */
-		if(pakutudtäht.isEmpty()) {
-			throw new ValeTaheErind("Seda tähte ei ole tähestikus");
-		}
-		char t = pakutudtäht.charAt(0);
-		if(tähestik.indexOf(t) == -1) {
-			throw new ValeTaheErind("Seda tähte ei ole tähestikus");
-		}
 		while (uus1.indexOf(pakutudtäht) != -1) {
 			
 			int täheindeks = uus1.indexOf(pakutudtäht);
