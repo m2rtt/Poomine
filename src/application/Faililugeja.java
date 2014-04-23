@@ -20,6 +20,7 @@ public class Faililugeja extends Main {
 			counter += 1;
 			
 		}
+		
 		sc.close();
 	}
 }
