@@ -33,9 +33,7 @@ import javafx.scene.text.Text;
 
 public class Main extends Application {
 	private int errors;
-	public String vihje = "";
-	public String sõna = "";
-	private boolean kasTöötab = false;
+	public String sõna;
 	protected static ArrayList<String> vihjelist = new ArrayList<String>();
 	protected static ArrayList<String> sõnalistt = new ArrayList<String>();
 	//private static String[] sõnalist;
@@ -47,15 +45,6 @@ public class Main extends Application {
 	private Taimer taimer;
 	protected static AnchorPane root;
 
-	// algväärtustamine
-	public void resetGame() {
-		vihje = "";
-		sõna = "";
-		kasTöötab = false;
-		sõnakriipsudena = "";
-		pakutudtäht = "";
-		errors = 0;
-	}
 	// see asi töötab isegi jou
 	public void runn() {
 		root.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -96,9 +85,9 @@ public class Main extends Application {
         Button start = new Button("Alusta");
         AnchorPane.setTopAnchor(start, 10.0);
         AnchorPane.setRightAnchor(start, 10.0);
-        final Button vihjenupp = new Button("Vihje");
-        AnchorPane.setTopAnchor(vihjenupp, 40.0);
-        AnchorPane.setRightAnchor(vihjenupp, 10.0);
+        Button abi = new Button("Abi");
+        AnchorPane.setTopAnchor(abi, 40.0);
+        AnchorPane.setRightAnchor(abi, 10.0);
         
         //tekst mänguseisu jaoks(arvatav sõna, valesid jne)
 	    final Label tekst = new Label("Arvatav sõna: \nVihje: \nTähed: ");
@@ -106,32 +95,20 @@ public class Main extends Application {
         AnchorPane.setRightAnchor(tekst, 10.0);
 	    
         //addime kõik eelneva childreniteks
-        anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst);
+        anchorpane.getChildren().addAll(joonis, start, abi, pealkiri, tekst);
 	   	     
 	
 		
 		Scene scene = new Scene(anchorpane, 600, 600, Color.SNOW);
-		
-		vihjenupp.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(kasTöötab == true) {
-					vihje=vihjelist.get(sõnalistt.indexOf(sõna));
-					tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: "+vihje+"\nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
-					System.out.println(vihje);
-				}
-			}
-		});
+
 		// kui start vajutad siis mis juhtub
 		start.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent event) {
 				// genereerib random sõna listist
-				resetGame(); // algväärtustame muutujad
-				kasTöötab = true; // määrame töötamise tõeseks
-				//sõnakriipsudena = "";
+
+				sõnakriipsudena = "";
 				System.out.println(sõnalistt.size());
 				Random rand = new Random();
 				int arv = rand.nextInt(sõnalistt.size());
@@ -143,8 +120,8 @@ public class Main extends Application {
 					sõnakriipsudena += "_";
 				}
 				errors = 0;
-				pakutudtäht = "";
-				tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: "+vihje+"\nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
+				pakutudtäht = null;
+				tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
 
 			}
 		});
@@ -157,34 +134,28 @@ public class Main extends Application {
 				keyEvent.consume();
 
 				if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
-					try {
-						sõnakriipsudena = Kontroll.Asendakriipsud(sõna, sõnakriipsudena, pakutudtäht);
-					} catch (ValeTaheErind e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					sõnakriipsudena = Kontroll.Asendakriipsud(sõna, sõnakriipsudena, pakutudtäht);
 				}
 				else {
 					errors++;
 				}
 				
-				tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: "+vihje+"\nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
+				tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
 				
 				if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
 					// YOU WIN ehk teeb midagi
-					tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: "+vihje+"\nValitud täht: "+pakutudtäht+"\nErrors: "+errors+"\nSINA VÕITSID!");
-					resetGame();
+					tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors+"\nSINA VÕITSID!");
+					
 				}
 				Poomine.joonista(errors);
 				if (errors == 7) {
 					tekst.setText("KAOTASID!\nLiiga palju erroreid!");
-					resetGame();
 				}
 
 			}
 		});
 
-		//lava.setResizable(false);
+		lava.setResizable(false);
 		lava.setScene(scene);
 		lava.show();
 
