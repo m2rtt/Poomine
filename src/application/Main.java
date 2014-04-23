@@ -27,6 +27,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -78,7 +80,7 @@ public class Main extends Application {
         joonis.setStyle("-fx-background-color: yellow;");
         AnchorPane.setTopAnchor(joonis, 65.0);
         AnchorPane.setLeftAnchor(joonis, 10.0);
-        AnchorPane.setRightAnchor(joonis, 150.0);
+        AnchorPane.setRightAnchor(joonis, 200.0);
         AnchorPane.setBottomAnchor(joonis, 10.0);
         
         //nupud alusta ja abi
@@ -91,11 +93,30 @@ public class Main extends Application {
         
         //tekst mänguseisu jaoks(arvatav sõna, valesid jne)
 	    final Label tekst = new Label("Arvatav sõna: \nVihje: \nTähed: ");
+	    tekst.setFont(Font.font ("Verdana", 20));
 	    AnchorPane.setTopAnchor(tekst, 70.0);
         AnchorPane.setRightAnchor(tekst, 10.0);
 	    
         //addime kõik eelneva childreniteks
         anchorpane.getChildren().addAll(joonis, start, abi, pealkiri, tekst);
+        
+        //poomispost
+        Rectangle alus = new Rectangle(10, 500, 120, 30);
+    	alus.setFill(Color.BROWN);
+    	joonis.getChildren().add(alus);
+    	Rectangle post = new Rectangle(55, 20, 25, 480);
+    	post.setFill(Color.BROWN);
+    	joonis.getChildren().add(post);
+    	Rectangle ots = new Rectangle(55, 20, 250, 25);
+    	ots.setFill(Color.BROWN);
+    	joonis.getChildren().add(ots);
+    	Line osa = new Line(65, 130, 150, 30);
+        osa.setStrokeWidth(10);
+        osa.setStroke(Color.BROWN);
+        joonis.getChildren().add(osa);
+        Rectangle otsalla = new Rectangle(305, 20, 25, 60);
+    	otsalla.setFill(Color.BROWN);
+    	joonis.getChildren().add(otsalla);
 	   	     
 	
 		
@@ -121,7 +142,7 @@ public class Main extends Application {
 				}
 				errors = 0;
 				pakutudtäht = null;
-				tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
+				tekst.setText("Arvatav sõna: \n"+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
 
 			}
 		});
@@ -140,11 +161,11 @@ public class Main extends Application {
 					errors++;
 				}
 				
-				tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
+				tekst.setText("Arvatav sõna: \n"+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
 				
 				if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
 					// YOU WIN ehk teeb midagi
-					tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors+"\nSINA VÕITSID!");
+					tekst.setText("Arvatav sõna: \n"+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors+"\nSINA VÕITSID!");
 					
 				}
 				Poomine.joonista(errors);
