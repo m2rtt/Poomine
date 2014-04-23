@@ -34,8 +34,7 @@ import javafx.scene.text.Text;
 public class Main extends Application {
 	private int errors;
 	public String sõna;
-	protected static ArrayList<String> vihjelist = new ArrayList<String>();
-	protected static ArrayList<String> sõnalistt = new ArrayList<String>();
+	private static ArrayList<String> sõnalistt = new ArrayList<String>();
 	//private static String[] sõnalist;
 	public static String pakutudtäht;
 	public String sõnakriipsudena = "";
@@ -58,6 +57,21 @@ public class Main extends Application {
 	}
 
 	// loeb failist sõnad listi
+	public static void faililugeja() throws FileNotFoundException {
+
+		java.io.File fail = new java.io.File("src\\application\\sõnad.txt");
+		java.util.Scanner sc = new java.util.Scanner(fail);
+		int counter = 0;
+		sõnalistt.removeAll(sõnalistt); // enne teeme sõnalisti tühjaks
+		while (sc.hasNextLine()) {
+			String rida = sc.nextLine();
+			sõnalistt.add(rida);
+			System.out.println(sõnalistt.get(counter));
+			counter += 1;
+			
+		}
+		sc.close();
+	}
 
 
 	@Override
@@ -107,7 +121,11 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				// genereerib random sõna listist
-
+				try {
+					faililugeja();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 				sõnakriipsudena = "";
 				System.out.println(sõnalistt.size());
 				Random rand = new Random();
@@ -162,11 +180,6 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		try {
-			Faililugeja.faililugeja();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 		launch(args);
 	}
 }
