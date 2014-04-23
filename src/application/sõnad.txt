@@ -2,3 +2,29 @@ mari;teisisõnu mammu
 suvi;soe aastaaeg
 päike;meile lähim täht
 tore;vahva
+arvuti;süle- või laua-
+telefon;kannad seda taskus
+morss;jook
+hiir;väike loom
+kalkulaator;arvutad sellega
+kuusk;puu
+voodi;magad seal
+viiner;lihatoode
+kana;mitte liha ega kala
+jalgratas;sõiduvahend
+elekter;mõõdetakse kWh-des
+pastakas;kirjutusvahend
+tapeet;paber seinas
+kalender;päevad ja kuud
+seinamaal;kunstiteos
+kunst;ilus asi
+raadio;hääl on, pilti pole
+televiisor;näitab uudiseid
+teksad;püksid
+pliiats;kirjutusvahend
+kaart;näitab kuhu minna
+pulgakomm;magus asi
+ajalugu;minevik
+muusika;hea kuulata
+kell;näitab aega
+dokument;tähtis paber
