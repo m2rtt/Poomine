@@ -1,5 +1,7 @@
 package application;
 	
+
+import java.io.FileNotFoundException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,6 +30,11 @@ import javafx.scene.text.Text;
 
 
 public class Main extends Application {
+	 private int errors;
+	 public String sõna;
+	 private static String[] sõnalist;
+	 public static String pakutudtäht;
+
 	
 	Canvas canvas = new Canvas(400, 400);
 	private Mangija playa;
@@ -44,6 +51,19 @@ public class Main extends Application {
                     
                 }
             });
+	}
+	//loeb failist sõnad listi
+    public static void faililugeja() throws FileNotFoundException {
+		
+		java.io.File fail = new java.io.File("sõnad.txt"); 
+		java.util.Scanner sc = new java.util.Scanner(fail);
+		int counter=0;
+		while (sc.hasNextLine()) {
+		    String rida = sc.nextLine();
+		    sõnalist[counter] = rida;
+		    counter+=1;
+		}
+		sc.close();
 	}
 	/*private VBox getNupud() {
 		VBox nupud = new VBox();
@@ -73,6 +93,7 @@ public class Main extends Application {
     
 	@Override
 	public void start(Stage lava) {	
+	
 		
 		lava.setTitle("Poomine");
 		Label pealkiri = new Label("Hangman");
@@ -90,20 +111,39 @@ public class Main extends Application {
 	    nupud.getChildren().addAll(start, abi);
 	    
 	    
+	    //tekst mänguseisu jaoks(arvatav sõna, valesid jne)
+	    Label tekst = new Label();
+	    
+	    
 	    
 	    VBox kokku = new VBox(10);
 	    kokku.setAlignment(Pos.CENTER);
 	    kokku.getChildren().addAll(pealkiri, nupud);
 
 		root.getChildren().add(kokku);
-		//prooviks laseb välja joonistada
-		Poomine.joonista(7);
-
-
-		
-		
+	
 		
 		Scene scene = new Scene(root, 500, 600, Color.SNOW);
+		
+		
+		start.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				//genereerib random sõna listist
+		    	int arv = (int) Math.random()*(sõnalist.length)+0;
+		    	sõna = sõnalist[arv];
+		    	//loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab canvasele trükkida, hiljem muudab neid -> _ tähtedeks
+		    	String sõnakriipsudena = "";
+				for (int i = 0; i < sõna.length(); i++){
+					sõnakriipsudena += "_ ";
+				}
+		    
+			}
+		}
+				);
+		
+		
 		runn();
 		lava.setResizable(false);
 		lava.setScene(scene);

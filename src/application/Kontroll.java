@@ -39,5 +39,13 @@ public class Kontroll extends Main {
     }
     return false;
     }
+    
+    public boolean kasTäht(char t) {
+    	/*
+    	 * kui vajutatud täht eksisteerib sõnas
+    	 * siis returnib 'true', else 'false'
+    	 */
+    	return true;
+    }
 
 }

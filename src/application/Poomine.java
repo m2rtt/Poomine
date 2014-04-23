@@ -9,39 +9,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 public class Poomine extends Main {
-	static final int lõpp = 10;   
-    private int errors;
-    public String sõna;
-    private static String[] sõnalist;
-    public static String pakutudtäht;
-    
-    
-    //loeb failist sõnad listi
-    public static void faililugeja() throws FileNotFoundException {
-		
-		java.io.File fail = new java.io.File("sõnad.txt"); 
-		java.util.Scanner sc = new java.util.Scanner(fail);
-		int counter=0;
-		while (sc.hasNextLine()) {
-		    String rida = sc.nextLine();
-		    sõnalist[counter] = rida;
-		    counter+=1;
-		}
-		sc.close();
-	}
-    
-    public void mängi() {
-    	//genereerib random sõna listist
-    	int arv = (int) Math.random()*(sõnalist.length)+0;
-    	sõna = sõnalist[arv];
-    	//loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab canvasele trükkida, hiljem muudab neid -> _ tähtedeks
-    	char tähed[] = new char[sõna.length()];
-        for (int i=0; i<sõna.length(); i++) {
-                tähed[i] = '_';
-        }
-
-    }
-    
     
     public static void joonista(int errors) {
     	//joonistab hangmani errorite kaupa
@@ -106,16 +73,6 @@ public class Poomine extends Main {
             
 
     	}	
-    }
-
-
-    
-    public boolean kasTäht(char t) {
-    	/*
-    	 * kui vajutatud täht eksisteerib sõnas
-    	 * siis returnib 'true', else 'false'
-    	 */
-    	return true;
     }
 
 }
