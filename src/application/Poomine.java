@@ -42,37 +42,6 @@ public class Poomine extends Main {
 
     }
     
-    public void kontrolli() {
-
-        
-        //kui täht ei leidu sõnas siis errors +1
-        if (sõna.indexOf(pakutudtäht) == -1){
-                errors++;
-                          
-                if (errors == lõpp){
-                	//mängu lõpp kuna erroreid liiga palju (errors = 10)
-
-                }    
-        }
-
-        //asendab '_' tähtedega kui need sõnas leiduvad
-        char pakutudtäht2 = pakutudtäht.charAt(0);
-
-        for (int i=0; i < sõna.length(); i++){
-                if (sõna.charAt(i) == pakutudtäht2){
-                	StringBuilder str = new StringBuilder(sõna);
-                    str.setCharAt(i, pakutudtäht2);
-                	sõna = str.toString();
-                }
-        }
-
-        // kui kõik tähed on arvatud
-        String t = new String(sõna);
-        if (t.indexOf('_') == -1){
-        	//võitsid ja teeb midagi
-        }
-        
-    }
     
     public static void joonista(int errors) {
     	//joonistab hangmani errorite kaupa
