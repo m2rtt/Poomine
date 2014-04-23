@@ -2,6 +2,7 @@ package application;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -38,7 +39,7 @@ public class Main extends Application {
 	public static String pakutudtäht;
 	public String sõnakriipsudena = "";
 
-	Canvas canvas = new Canvas(400, 400);
+	//Canvas canvas = new Canvas(400, 400);
 	private Mangija playa;
 	private Taimer taimer;
 	protected static AnchorPane root;
@@ -61,6 +62,7 @@ public class Main extends Application {
 		java.io.File fail = new java.io.File("src\\application\\sõnad.txt");
 		java.util.Scanner sc = new java.util.Scanner(fail);
 		int counter = 0;
+		sõnalistt.removeAll(sõnalistt); // enne teeme sõnalisti tühjaks
 		while (sc.hasNextLine()) {
 			String rida = sc.nextLine();
 			sõnalistt.add(rida);
@@ -113,8 +115,11 @@ public class Main extends Application {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				int arv = (int) Math.random() * (sõnalistt.size()) + 0;
+				System.out.println(sõnalistt.size());
+				Random rand = new Random();
+				int arv = rand.nextInt(sõnalistt.size());
 				sõna = sõnalistt.get(arv);
+				System.out.println(sõna);
 				// loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab
 				// canvasele trükkida, hiljem muudab neid -> _ tähtedeks
 				for (int i = 0; i < sõna.length(); i++) {
@@ -132,8 +137,7 @@ public class Main extends Application {
 				keyEvent.consume();
 
 				if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
-					sõnakriipsudena = Kontroll
-							.Asendakriipsud(sõna, pakutudtäht);
+					sõnakriipsudena = Kontroll.Asendakriipsud(sõna, pakutudtäht);
 				}
 
 				if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
