@@ -148,7 +148,7 @@ public class Main extends Application {
             public void changed(final ObservableValue<?> o, final Object vana1, final Object uus1){
             	final double y1 = (double) uus1;
             	y = y1;
-            	alus.setY(y1-30);
+            	//alus.setY(y1-30);
             	alus.setHeight(y*0.04);
             	post.setHeight(y*0.96-20);
             	
