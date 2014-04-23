@@ -120,22 +120,48 @@ public class Main extends Application {
 		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst);
 
 		// poomispost
-		Rectangle alus = new Rectangle(x*10, y*500, x*120, y*30);
+		//AnchorPane poomispost = new AnchorPane();
+		final Rectangle alus = new Rectangle(x*120, y*30);
 		alus.setFill(Color.BROWN);
-		joonis.getChildren().add(alus);
-		Rectangle post = new Rectangle(x*55, y*20, x*25, y*480);
+		AnchorPane.setBottomAnchor(alus, 20.0);
+		AnchorPane.setLeftAnchor(alus, 20.0);
+		//poomispost.getChildren().add(alus);
+		//joonis.getChildren().add(alus);
+		final Rectangle post = new Rectangle(x*55, y*20, x*25, y*480);
 		post.setFill(Color.BROWN);
 		joonis.getChildren().add(post);
 		Rectangle ots = new Rectangle(55, 20, 250, 25);
 		ots.setFill(Color.BROWN);
-		joonis.getChildren().add(ots);
+		//joonis.getChildren().add(ots);
 		Line osa = new Line(65, 130, 150, 30);
 		osa.setStrokeWidth(10);
 		osa.setStroke(Color.BROWN);
-		joonis.getChildren().add(osa);
+		//joonis.getChildren().add(osa);
 		Rectangle otsalla = new Rectangle(305, 20, 25, 60);
 		otsalla.setFill(Color.BROWN);
-		joonis.getChildren().add(otsalla);
+		//joonis.getChildren().add(otsalla);
+		Group poomispost = new Group();
+		poomispost.getChildren().addAll(alus,post,ots,osa,otsalla);
+		joonis.getChildren().add(poomispost);
+		
+		joonis.heightProperty().addListener(new ChangeListener<Object>(){
+            public void changed(final ObservableValue<?> o, final Object vana1, final Object uus1){
+            	final double y1 = (double) uus1;
+            	y = y1;
+            	alus.setY(y1-30);
+            	alus.setHeight(y*0.04);
+            	post.setHeight(y*0.96-20);
+            	
+
+           }
+        });
+        joonis.widthProperty().addListener(new ChangeListener<Object>(){
+            public void changed(final ObservableValue<?> o, final Object vana, final Object uus2){
+            	final double x1 = (double) uus2;
+            	x = 600.0/x1;
+
+           }
+        });
 
 		Scene scene = new Scene(anchorpane, 600, 600, Color.WHEAT);
 		vihjenupp.setOnAction(new EventHandler<ActionEvent>() {
@@ -189,8 +215,6 @@ public class Main extends Application {
 					if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
 						sõnakriipsudena = Kontroll.Asendakriipsud(sõna, sõnakriipsudena, pakutudtäht);
 
-						System.out.println("Tekkis erind: Seda tähte pole tähestikus");
-
 					} else {
 						errors++;
 					}
@@ -217,23 +241,6 @@ public class Main extends Application {
 
 			}
 		});
-		
-		scene.heightProperty().addListener(new ChangeListener<Object>(){
-            public void changed(final ObservableValue<?> o, final Object vana1, final Object uus1){
-            	final double y1 = (double) uus1;
-            	y = 600.0/y1;
-            	
-            	
-
-           }
-        });
-        scene.widthProperty().addListener(new ChangeListener<Object>(){
-            public void changed(final ObservableValue<?> o, final Object vana, final Object uus2){
-            	final double x1 = (double) uus2;
-            	x = 600.0/x1;
-
-           }
-        });
 
 		// lava.setResizable(false);
 		lava.setScene(scene);
