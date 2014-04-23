@@ -1,6 +1,7 @@
 package application;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -32,7 +33,8 @@ import javafx.scene.text.Text;
 public class Main extends Application {
 	private int errors;
 	public String sõna;
-	private static String[] sõnalist;
+	private static ArrayList<String> sõnalistt = new ArrayList<String>();
+	//private static String[] sõnalist;
 	public static String pakutudtäht;
 	public String sõnakriipsudena = "";
 
@@ -61,9 +63,10 @@ public class Main extends Application {
 		int counter = 0;
 		while (sc.hasNextLine()) {
 			String rida = sc.nextLine();
-			sõnalist[counter] = rida;
+			sõnalistt.add(rida);
+			System.out.println(sõnalistt.get(counter));
 			counter += 1;
-			System.out.println(sõnalist[counter]);
+			
 		}
 		sc.close();
 	}
@@ -110,8 +113,8 @@ public class Main extends Application {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				int arv = (int) Math.random() * (sõnalist.length) + 0;
-				sõna = sõnalist[arv];
+				int arv = (int) Math.random() * (sõnalistt.size()) + 0;
+				sõna = sõnalistt.get(arv);
 				// loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab
 				// canvasele trükkida, hiljem muudab neid -> _ tähtedeks
 				for (int i = 0; i < sõna.length(); i++) {
