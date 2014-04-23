@@ -120,7 +120,7 @@ public class Main extends Application {
 		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst);
 
 		// poomispost
-		Rectangle alus = new Rectangle(x*10, y*490, x*120, y*30);
+		Rectangle alus = new Rectangle(x*10, y*500, x*120, y*30);
 		alus.setFill(Color.BROWN);
 		joonis.getChildren().add(alus);
 		Rectangle post = new Rectangle(x*55, y*20, x*25, y*480);
