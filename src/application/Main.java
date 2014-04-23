@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -38,7 +39,7 @@ public class Main extends Application {
 	Canvas canvas = new Canvas(400, 400);
 	private Mangija playa;
 	private Taimer taimer;
-	protected static FlowPane root;
+	protected static AnchorPane root;
 
 	// see asi töötab isegi jou
 	public void runn() {
@@ -55,40 +56,27 @@ public class Main extends Application {
 	// loeb failist sõnad listi
 	public static void faililugeja() throws FileNotFoundException {
 
-		java.io.File fail = new java.io.File("sõnad.txt");
+		java.io.File fail = new java.io.File("src\\application\\sõnad.txt");
 		java.util.Scanner sc = new java.util.Scanner(fail);
 		int counter = 0;
 		while (sc.hasNextLine()) {
 			String rida = sc.nextLine();
 			sõnalist[counter] = rida;
 			counter += 1;
+			System.out.println(sõnalist[counter]);
 		}
 		sc.close();
 	}
 
-	/*
-	 * private VBox getNupud() { VBox nupud = new VBox(); Button start = new
-	 * Button("Alusta"); start.setLayoutX(0); start.setLayoutY(0); Button abi =
-	 * new Button("Abi"); abi.setLayoutX(100); abi.setLayoutY(0);
-	 * nupud.getChildren().addAll(start, abi); nupud.setSpacing(10);
-	 * 
-	 * start.setOnAction(new EventHandler<ActionEvent>() {
-	 * 
-	 * @Override public void handle(ActionEvent arg0) { /* alustab mängu
-	 * 
-	 * } });
-	 * 
-	 * return nupud; }
-	 */
 
 	@Override
 	public void start(Stage lava) {
 
 		lava.setTitle("Poomine");
-		Label pealkiri = new Label("Hangman");
+		Label pealkiri = new Label("Nigga gun be dead");
 		pealkiri.setFont(Font.font("Verdana", 40));
 
-		root = new FlowPane();
+		root = new AnchorPane();
 		root.setLayoutX(20);
 		root.setLayoutY(20);
 
@@ -116,6 +104,12 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				// genereerib random sõna listist
+				try {
+					faililugeja();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				int arv = (int) Math.random() * (sõnalist.length) + 0;
 				sõna = sõnalist[arv];
 				// loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab
