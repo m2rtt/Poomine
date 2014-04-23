@@ -39,7 +39,7 @@ public class Main extends Application {
 	public static String pakutudtäht;
 	public String sõnakriipsudena = "";
 
-	//Canvas canvas = new Canvas(400, 400);
+	static Pane joonis = new Pane();
 	private Mangija playa;
 	private Taimer taimer;
 	protected static AnchorPane root;
@@ -77,31 +77,45 @@ public class Main extends Application {
 	@Override
 	public void start(Stage lava) {
 
-		lava.setTitle("Poomine");
-		Label pealkiri = new Label("Nigga gun be dead");
-		pealkiri.setFont(Font.font("Verdana", 40));
-
-		root = new AnchorPane();
-		root.setLayoutX(20);
-		root.setLayoutY(20);
-
-		Button start = new Button("Alusta");
-		Button abi = new Button("Abi");
-
-		FlowPane nupud = new FlowPane(50, 50);
-		nupud.setAlignment(Pos.CENTER);
-		nupud.getChildren().addAll(start, abi);
-
-		// tekst mänguseisu jaoks(arvatav sõna, valesid jne)
-		Label tekst = new Label();
-
-		VBox kokku = new VBox(10);
-		kokku.setAlignment(Pos.CENTER);
-		kokku.getChildren().addAll(pealkiri, nupud);
-
-		root.getChildren().add(kokku);
-
-		Scene scene = new Scene(root, 500, 600, Color.SNOW);
+        lava.setTitle("Poomine");
+		
+		//luuakse juur
+		AnchorPane anchorpane = new AnchorPane();
+		
+		//mängu nimi
+		Label pealkiri = new Label("Hangman");
+		pealkiri.setFont(Font.font ("Verdana", 40));
+		AnchorPane.setTopAnchor(pealkiri, 10.0);
+        AnchorPane.setLeftAnchor(pealkiri, 10.0);
+		
+        //koht kuhu joonistatakse kriipsujuku
+        joonis.setStyle("-fx-background-color: yellow;");
+        AnchorPane.setTopAnchor(joonis, 65.0);
+        AnchorPane.setLeftAnchor(joonis, 10.0);
+        AnchorPane.setRightAnchor(joonis, 150.0);
+        AnchorPane.setBottomAnchor(joonis, 10.0);
+        
+        //nupud alusta ja abi
+        Button start = new Button("Alusta");
+        AnchorPane.setTopAnchor(start, 10.0);
+        AnchorPane.setRightAnchor(start, 10.0);
+        Button abi = new Button("Abi");
+        AnchorPane.setTopAnchor(abi, 40.0);
+        AnchorPane.setRightAnchor(abi, 10.0);
+        
+        //tekst mänguseisu jaoks(arvatav sõna, valesid jne)
+	    Label tekst = new Label("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nTähed: "+pakutudtäht);
+	    AnchorPane.setTopAnchor(tekst, 70.0);
+        AnchorPane.setRightAnchor(tekst, 10.0);
+	    
+        //addime kõik eelneva childreniteks
+        anchorpane.getChildren().addAll(joonis, start, abi, pealkiri, tekst);
+	   	    
+        Poomine.joonista(7);
+	   
+	
+		
+		Scene scene = new Scene(anchorpane, 600, 600, Color.SNOW);
 
 		// kui start vajutad siis mis juhtub
 		start.setOnAction(new EventHandler<ActionEvent>() {
@@ -112,7 +126,6 @@ public class Main extends Application {
 				try {
 					faililugeja();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				System.out.println(sõnalistt.size());
@@ -130,7 +143,7 @@ public class Main extends Application {
 		});
 
 		// kui tähti vajutatakse siis mis teeb
-		root.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		anchorpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(final KeyEvent keyEvent) {
 				pakutudtäht = keyEvent.getText();
 				System.out.println(keyEvent.getText());
