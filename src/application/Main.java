@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -27,6 +29,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -43,11 +46,14 @@ public class Main extends Application {
 	// private static String[] sõnalist;
 	public static String pakutudtäht;
 	public String sõnakriipsudena = "";
+	double y = 1;
+	double x = 1;
 
 	static Pane joonis = new Pane();
 	private Mangija playa;
 	private Taimer taimer;
 	protected static AnchorPane root;
+	
 
 	// algväärtustamine
 	public void resetGame() {
@@ -57,6 +63,8 @@ public class Main extends Application {
 		sõnakriipsudena = "";
 		pakutudtäht = "";
 		errors = 0;
+		Poomine.resetJoonista();
+		
 	}
 
 	// see asi töötab isegi jou
@@ -88,7 +96,7 @@ public class Main extends Application {
 		AnchorPane.setLeftAnchor(pealkiri, 10.0);
 
 		// koht kuhu joonistatakse kriipsujuku
-		joonis.setStyle("-fx-background-color: yellow;");
+		joonis.setStyle("-fx-background-color: azure;");
 		AnchorPane.setTopAnchor(joonis, 65.0);
 		AnchorPane.setLeftAnchor(joonis, 10.0);
 		AnchorPane.setRightAnchor(joonis, 200.0);
@@ -112,10 +120,10 @@ public class Main extends Application {
 		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst);
 
 		// poomispost
-		Rectangle alus = new Rectangle(10, 500, 120, 30);
+		Rectangle alus = new Rectangle(x*10, y*500, x*120, y*30);
 		alus.setFill(Color.BROWN);
 		joonis.getChildren().add(alus);
-		Rectangle post = new Rectangle(55, 20, 25, 480);
+		Rectangle post = new Rectangle(x*55, y*20, x*25, y*480);
 		post.setFill(Color.BROWN);
 		joonis.getChildren().add(post);
 		Rectangle ots = new Rectangle(55, 20, 250, 25);
@@ -129,14 +137,14 @@ public class Main extends Application {
 		otsalla.setFill(Color.BROWN);
 		joonis.getChildren().add(otsalla);
 
-		Scene scene = new Scene(anchorpane, 600, 600, Color.SNOW);
+		Scene scene = new Scene(anchorpane, 600, 600, Color.WHEAT);
 		vihjenupp.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
 				if (kasTöötab == true) {
 					vihje = vihjelist.get(sõnalistt.indexOf(sõna));
-					tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: " + vihje
+					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena + "\nVihje: \n" + vihje
 							+ "\nValitud täht: " + pakutudtäht + "\nErrors: " + errors);
 					System.out.println(vihje);
 				}
@@ -158,14 +166,14 @@ public class Main extends Application {
 				sõna = sõnalistt.get(arv);
 				System.out.println(sõna);
 				// loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab
-				// canvasele trükkida, hiljem muudab neid -> _ tähtedeks
 				for (int i = 0; i < sõna.length(); i++) {
 					sõnakriipsudena += "_";
 				}
 				errors = 0;
 				pakutudtäht = "";
-				tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: " + vihje + "\nValitud täht: "
+				tekst.setText("Arvatav sõna: \n" + sõnakriipsudena + "\nVihje: \n" + vihje + "\nValitud täht: "
 				+ pakutudtäht + "\nErrors: " + errors);
+				
 
 			}
 		});
@@ -190,12 +198,12 @@ public class Main extends Application {
 					System.out.println("Tekkis erind: seda tähte pole tähestikus või vajutasid shift/tab/alt etc");
 				}
 
-				tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: " + vihje
+				tekst.setText("Arvatav sõna: \n" + sõnakriipsudena + "\nVihje: \n" + vihje
 						+ "\nValitud täht: " + pakutudtäht + "\nErrors: " + errors);
 
 				if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
 					// YOU WIN ehk teeb midagi
-					tekst.setText("Arvatav sõna: " + sõnakriipsudena + "\nVihje: " + vihje + "\nValitud täht: "
+					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena + "\nVihje: \n" + vihje + "\nValitud täht: "
 							+ pakutudtäht + "\nErrors: " + errors + "\nSINA VÕITSID!");
 					start.setDisable(false);
 					resetGame();
@@ -209,6 +217,23 @@ public class Main extends Application {
 
 			}
 		});
+		
+		scene.heightProperty().addListener(new ChangeListener<Object>(){
+            public void changed(final ObservableValue<?> o, final Object vana1, final Object uus1){
+            	final double y1 = (double) uus1;
+            	y = 600.0/y1;
+            	
+            	
+
+           }
+        });
+        scene.widthProperty().addListener(new ChangeListener<Object>(){
+            public void changed(final ObservableValue<?> o, final Object vana, final Object uus2){
+            	final double x1 = (double) uus2;
+            	x = 600.0/x1;
+
+           }
+        });
 
 		// lava.setResizable(false);
 		lava.setScene(scene);
