@@ -2,8 +2,7 @@ package application;
 
 public class Kontroll extends Main {
 
-	static public boolean KasTähtOnSõnas(String sõna, String pakutudtäht,
-			int errors) {
+	static public boolean KasTähtOnSõnas(String sõna, String pakutudtäht, int errors) {
 		// kui täht ei leidu sõnas siis errors +1
 		if (sõna.indexOf(pakutudtäht) == -1) {
 			errors++;
@@ -18,8 +17,7 @@ public class Kontroll extends Main {
 		}
 	}
 
-	static public String Asendakriipsud(String sõnakriipsudena,
-			String pakutudtäht) {
+	static public String Asendakriipsud(String sõnakriipsudena, String pakutudtäht) {
 		// asendab '_' tähtedega kui need sõnas leiduvad
 		char pakutudtäht2 = pakutudtäht.charAt(0);
 		for (int i = 0; i < sõnakriipsudena.length(); i++) {
@@ -41,13 +39,4 @@ public class Kontroll extends Main {
 		}
 		return false;
 	}
-
-	public boolean kasTäht(char t) {
-		/*
-		 * kui vajutatud täht eksisteerib sõnas siis returnib 'true', else
-		 * 'false'
-		 */
-		return true;
-	}
-
 }
