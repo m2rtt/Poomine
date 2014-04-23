@@ -34,7 +34,7 @@ public class Kontroll extends Main {
 		 * pakutudtäht2); } sõnakriipsudena = str.toString(); }
 		 */
 		char t = pakutudtäht.charAt(0);
-		if(t != tähestik.charAt(0)) {
+		if(tähestik.indexOf(t) == -1) {
 			throw new ValeTaheErind("Seda tähte ei ole tähestikus");
 		}
 		while (uus1.indexOf(pakutudtäht) != -1) {

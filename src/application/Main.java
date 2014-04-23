@@ -182,8 +182,7 @@ public class Main extends Application {
 					try {
 						sõnakriipsudena = Kontroll.Asendakriipsud(sõna, sõnakriipsudena, pakutudtäht);
 					} catch (ValeTaheErind e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("Tekkis erind: Seda tähte pole tähestikus");
 					}
 				}
 				else {
@@ -206,7 +205,7 @@ public class Main extends Application {
 			}
 		});
 
-		lava.setResizable(false);
+		//lava.setResizable(false);
 		lava.setScene(scene);
 		lava.show();
 
