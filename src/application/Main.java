@@ -104,15 +104,13 @@ public class Main extends Application {
         AnchorPane.setRightAnchor(abi, 10.0);
         
         //tekst mänguseisu jaoks(arvatav sõna, valesid jne)
-	    Label tekst = new Label("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nTähed: "+pakutudtäht);
+	    final Label tekst = new Label("Arvatav sõna: \nVihje: \nTähed: ");
 	    AnchorPane.setTopAnchor(tekst, 70.0);
         AnchorPane.setRightAnchor(tekst, 10.0);
 	    
         //addime kõik eelneva childreniteks
         anchorpane.getChildren().addAll(joonis, start, abi, pealkiri, tekst);
-	   	    
-        Poomine.joonista(7);
-	   
+	   	     
 	
 		
 		Scene scene = new Scene(anchorpane, 600, 600, Color.SNOW);
@@ -128,6 +126,7 @@ public class Main extends Application {
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
+				sõnakriipsudena = "";
 				System.out.println(sõnalistt.size());
 				Random rand = new Random();
 				int arv = rand.nextInt(sõnalistt.size());
@@ -138,6 +137,9 @@ public class Main extends Application {
 				for (int i = 0; i < sõna.length(); i++) {
 					sõnakriipsudena += "_";
 				}
+				errors = 0;
+				pakutudtäht = null;
+				tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
 
 			}
 		});
@@ -150,11 +152,22 @@ public class Main extends Application {
 				keyEvent.consume();
 
 				if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
-					sõnakriipsudena = Kontroll.Asendakriipsud(sõna, pakutudtäht);
+					sõnakriipsudena = Kontroll.Asendakriipsud(sõna, sõnakriipsudena, pakutudtäht);
 				}
-
+				else {
+					errors++;
+				}
+				
+				tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors);
+				
 				if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
 					// YOU WIN ehk teeb midagi
+					tekst.setText("Arvatav sõna: "+sõnakriipsudena+"\nVihje: lamp \nValitud täht: "+pakutudtäht+"\nErrors: "+errors+"\nSINA VÕITSID!");
+					
+				}
+				Poomine.joonista(errors);
+				if (errors == 7) {
+					tekst.setText("KAOTASID!\nLiiga palju erroreid!");
 				}
 
 			}

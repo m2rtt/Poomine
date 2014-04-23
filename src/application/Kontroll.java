@@ -5,29 +5,34 @@ public class Kontroll extends Main {
 	static public boolean KasTähtOnSõnas(String sõna, String pakutudtäht, int errors) {
 		// kui täht ei leidu sõnas siis errors +1
 		if (sõna.indexOf(pakutudtäht) == -1) {
-			errors++;
-
-			if (errors == 7) {
-				// mängu lõpp kuna erroreid liiga palju (errors = 10)
-				// return midagi;
-			}
+			
 			return false;
-		} else {
+		} 
+		else {
 			return true;
 		}
 	}
 
-	static public String Asendakriipsud(String sõnakriipsudena, String pakutudtäht) {
+	static public String Asendakriipsud(String sõna, String sõnakriipsudena, String pakutudtäht) {
 		// asendab '_' tähtedega kui need sõnas leiduvad
-		char pakutudtäht2 = pakutudtäht.charAt(0);
-		for (int i = 0; i < sõnakriipsudena.length(); i++) {
+		//char pakutudtäht2 = pakutudtäht.charAt(0);
+		StringBuilder uus1 = new StringBuilder(sõna);
+		StringBuilder uus2 = new StringBuilder(sõnakriipsudena);
+		/*for (int i = 0; i < sõnakriipsudena.length(); i++) {
+			StringBuilder str = new StringBuilder(sõnakriipsudena);
 			if (sõnakriipsudena.charAt(i) == pakutudtäht2) {
-				StringBuilder str = new StringBuilder(sõnakriipsudena);
 				str.setCharAt(i, pakutudtäht2);
-				sõnakriipsudena = str.toString();
 			}
+			sõnakriipsudena = str.toString();
 		}
-		return sõnakriipsudena;
+		*/
+		while (uus1.indexOf(pakutudtäht) != -1){
+			  int täheindeks = uus1.indexOf(pakutudtäht);
+			  uus1.setCharAt(täheindeks, '0');
+			  uus2.setCharAt(täheindeks, pakutudtäht.charAt(0));
+		  }
+		  return uus2.toString();
+
 	}
 
 	public static boolean KasArvatud(String sõna) {
