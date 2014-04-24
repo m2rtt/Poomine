@@ -19,9 +19,14 @@ public class Kontroll extends Main {
 	private static String tähestik = "abcdefghijklmnopqrsztuvwõäöüxy";
 	static public boolean KasTähtOnSõnas(String sõna, String pakutudtäht, int errors) throws ValeTaheErind {
 		// kui täht ei leidu sõnas siis errors +1
-		char t = pakutudtäht.charAt(0);
-		if(tähestik.indexOf(t) == -1 || pakutudtäht.isEmpty()) {
+		//char t = pakutudtäht.charAt(0);
+		if(pakutudtäht.isEmpty()) {
 			throw new ValeTaheErind("Seda tähte ei ole tähestikus");
+		}
+		char t = pakutudtäht.charAt(0);
+		if(tähestik.indexOf(t) == -1) {
+			throw new ValeTaheErind("Seda tähte ei ole tähestikus");
+
 		}
 		if (sõna.indexOf(pakutudtäht) == -1) {
 
