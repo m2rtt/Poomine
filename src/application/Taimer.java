@@ -10,18 +10,20 @@ import java.util.TimerTask;
 public class Taimer extends Main{
 	//static int intervall;
 	static Timer taimer;
-	static int aeg = 10;
+	static int aeg = -1;
 	/*
 	public static void main(String[] args) {
 		alusta();
 	}
 	*/
-	public void stopp() {
-		taimer.cancel();
+	public static void stopp() {
+		if(aeg != -1)
+			taimer.cancel();
 	}
 	public static void alusta() {
 		int delay = 1000;
 		int period = 1000;
+		aeg = 120;
 		taimer = new Timer();
 		//intervall = getAeg();
 		// google'i abiga loodud taimer
@@ -39,9 +41,10 @@ public class Taimer extends Main{
 	private static final int setIntervall() {
 		if (aeg <= 0) {
 			taimer.cancel();
+			resetGame();
 			muudaTekst("Aeg läbi!");
 			System.out.println("Aeg läbi");
-			aeg = 10;
+			aeg = 120;
 			
 		}
 		return --aeg;

@@ -27,17 +27,22 @@ public class Main extends Application {
 
 	//Taimer ajaloendur = new Taimer();
 	static Label pealkiri = new Label("Poomismäng");
-	private int errors;
-	public String vihje = "";
-	public String sõna = "";
-	private boolean kasTöötab = false;
+	private static int errors;
+	public static String vihje = "";
+	public static String sõna = "";
+	private static boolean kasTöötab = false;
 	protected static ArrayList<String> vihjelist = new ArrayList<String>();
 	protected static ArrayList<String> sõnalist = new ArrayList<String>();
 	// private static String[] sõnalist;
 	public static String pakutudtäht;
-	public String sõnakriipsudena = "";
+	public static String sõnakriipsudena = "";
 	double y = 1;
 	double x = 1;
+	
+	final Label tekst = new Label("Arvatav sõna: \nVihje: \nTähed: ");
+	final Button start = new Button("Alusta");
+	final Button vihjenupp = new Button("Vihje");
+
 
 	static Pane joonis = new Pane();
 	//private Mangija playa; // veel ei kasuta
@@ -54,15 +59,37 @@ public class Main extends Application {
         });
 	}
 	// algväärtustamine
-	public void resetGame() {
-		vihje = "";
-		sõna = "";
+	public static void resetGame() {
+		Taimer.stopp();
+		Taimer.setAeg(120);
+		resetSona();
 		kasTöötab = false;
-		sõnakriipsudena = "";
-		pakutudtäht = "";
 		errors = 0;
 		Poomine.resetJoonista();
-
+	}
+	public static void resetSona() {
+		vihje = "";
+		sõna = "";
+		sõnakriipsudena = "";
+		pakutudtäht = "";
+	}
+	protected void uusSona() {
+		resetSona();
+		System.out.println(sõnalist.size());
+		Random rand = new Random();
+		int arv = rand.nextInt(sõnalist.size());
+		sõna = sõnalist.get(arv);
+		//System.out.println(sõna); // näitab, palju neid sõnu üldse listis on
+		// loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab
+		for (int i = 0; i < sõna.length(); i++) {
+			sõnakriipsudena += "_";
+		}
+		errors = 0;
+		pakutudtäht = "";
+		tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
+				+ "\nVihje: \n" + vihje + "\nValitud täht: "
+				+ pakutudtäht + "\nVigu: " + errors);
+		
 	}
 
 	@Override
@@ -88,15 +115,12 @@ public class Main extends Application {
 		AnchorPane.setBottomAnchor(joonis, 10.0);
 
 		// nupud alusta ja abi
-		final Button start = new Button("Alusta");
 		AnchorPane.setTopAnchor(start, 10.0);
 		AnchorPane.setRightAnchor(start, 10.0);
-		final Button vihjenupp = new Button("Vihje");
 		AnchorPane.setTopAnchor(vihjenupp, 40.0);
 		AnchorPane.setRightAnchor(vihjenupp, 10.0);
 
 		// tekst mänguseisu jaoks(arvatav sõna, valesid jne)
-		final Label tekst = new Label("Arvatav sõna: \nVihje: \nTähed: ");
 		tekst.setFont(Font.font("Century Gothic", 20));
 		AnchorPane.setTopAnchor(tekst, 70.0);
 		AnchorPane.setRightAnchor(tekst, 10.0);
@@ -155,7 +179,7 @@ public class Main extends Application {
 							+ pakutudtäht + "\nF: " + errors);
 					System.out.println(vihje);
 					System.out.println("xd");
-					Taimer.setAeg(10);
+					Taimer.setAeg(Taimer.getAeg() - 5);
 				}
 			}
 		});
@@ -165,26 +189,12 @@ public class Main extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				// genereerib random sõna listist
-				start.setDisable(true);
 				resetGame(); // algväärtustame muutujad
 				kasTöötab = true; // määrame töötamise tõeseks
 				// sõnakriipsudena = "";
 				Taimer.alusta();
-				System.out.println(sõnalist.size());
-				Random rand = new Random();
-				int arv = rand.nextInt(sõnalist.size());
-				sõna = sõnalist.get(arv);
-				//System.out.println(sõna); // näitab, palju neid sõnu üldse listis on
-				// loob sõnale vastava _ _ _ _ _ _ _ järjendi mille saab
-				for (int i = 0; i < sõna.length(); i++) {
-					sõnakriipsudena += "_";
-				}
-				errors = 0;
-				pakutudtäht = "";
-				tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
-						+ "\nVihje: \n" + vihje + "\nValitud täht: "
-						+ pakutudtäht + "\nVigu: " + errors);
-
+				start.setDisable(true);
+				uusSona();
 			}
 		});
 
@@ -204,6 +214,7 @@ public class Main extends Application {
 
 						} else {
 							errors++;
+							Taimer.setAeg(Taimer.getAeg()-10);
 						}
 					} catch (ValeTaheErind e) {
 						System.out
@@ -220,8 +231,11 @@ public class Main extends Application {
 								+ "\nVihje: \n" + vihje + "\nValitud täht: "
 								+ pakutudtäht + "\nvigu: " + errors
 								+ "\nSINA VÕITSID!");
-						start.setDisable(false);
-						resetGame();
+						//start.setDisable(false);
+						//resetGame();
+						Taimer.setAeg(Taimer.getAeg()+30);
+						uusSona();
+						
 					}
 					Poomine.joonista(errors);
 					if (errors == 7) {
