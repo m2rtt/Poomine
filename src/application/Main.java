@@ -53,33 +53,34 @@ public class Main extends Application {
 	double y = 1;
 	double x = 1;
 	
-	final Label tekst = new Label("Arvatav sõna: \nVihje: \nTähed: ");
+	public String tekstikast() {
+		return "Arvatav sõna: \n" + sõnakriipsudena
+			+ "\nVihje: \n" + vihje + "\nValitud täht: "
+			+ pakutudtäht + "\nVigu: " + errors + "\nPunkte: " + punktid;
+	}
+	
+	final static Label tekst = new Label("Vilkommen!");
+	final static Label ajalabel = new Label("");
 	final static Button start = new Button("Alusta");
 	final static Button vihjenupp = new Button("Vihje");
 
-
 	static Pane joonis = new Pane();
 	//private Mangija playa; // veel ei kasuta
-	//private Taimer taimer; // veel ei kasuta
-	protected static AnchorPane root;
+	AnchorPane anchorpane = new AnchorPane();
 	
 	// http://java-buddy.blogspot.com/2012/06/update-ui-in-javafx-application-thread.html
-	public static void muudaTekst(final String tekst) {
+	public static void muudaTekst(final String aeg) {
         Platform.runLater(new Runnable(){
             @Override
             public void run() {
-                pealkiri.setText(tekst);
+                ajalabel.setText("Aeg: "+ aeg);
             }
         });
 	}
+	
 	// algväärtustamine	
 	public static void resetGame() {
-		Platform.runLater(new Runnable() {
-	        @Override
-	        public void run() {
-	        	Poomine.resetJoonista();	        
-	        }
-	   });
+		Poomine.resetJoonista();
 		Taimer.stopp();
 		Taimer.setAeg(TAIMERIAEG);
 		resetSona();
@@ -87,9 +88,9 @@ public class Main extends Application {
 		vihjenupp.setDisable(true);
 		kasTöötab = false;
 		errors = 0;
-		punktid = 0;
-		
+		punktid = 0;		
 	}
+	
 	public static void resetSona() {
 		vihje = "";
 		sõna = "";
@@ -97,6 +98,7 @@ public class Main extends Application {
 		pakutudtäht = "";
 		pakutudtähed.clear();
 	}
+	
 	protected void uusSona() {
 		resetSona();
 		vihjenupp.setDisable(false);
@@ -111,24 +113,55 @@ public class Main extends Application {
 		}
 		//errors = 0;
 		pakutudtäht = "";
-		tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
-				+ "\nVihje: \n" + vihje + "\nValitud täht: "
-				+ pakutudtäht + "\nVigu: " + errors + "\nPunkte: " + punktid);
+		tekst.setText(tekstikast());
 		
 	}
+	
+	protected void täheVajutus(String pakutudtäht) {
+		try {
+			if(pakutudtähed.contains(pakutudtäht)) {
+				System.out.println("Tähte "+pakutudtäht+" on juba pakutud");
+			}
+			else {
+				pakutudtähed.add(pakutudtäht);
+				if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
+					sõnakriipsudena = Kontroll.Asendakriipsud(sõna,
+						sõnakriipsudena, pakutudtäht);
+					punktid += OIGETAHT;
+				} else {
+					errors++;
+					punktid -= VALETAHT;
+					Taimer.setAeg(Taimer.getAeg()-VALETAHTAEG);
+				}
+			}
+		} catch (ValeTaheErind e) {
+			System.out
+					.println("Tekkis erind: seda tähte pole tähestikus või vajutasid shift/tab/alt etc");
+		}
 
-	@Override
-	public void start(Stage lava) {
+		tekst.setText(tekstikast());
 
-		// luuakse juur
-		AnchorPane anchorpane = new AnchorPane();
-		Scene scene = new Scene(anchorpane, 600, 570, Color.WHEAT);
-		// mängu nimi
-		//Label pealkiri = new Label("Poomismäng");
+		if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
+			// YOU WIN ehk teeb midagi
+			punktid += OIGESONA;
+			tekst.setText(tekstikast());
+			//start.setDisable(false);
+			//resetGame();
+			Taimer.setAeg(Taimer.getAeg()+30);
+			uusSona();
+			
+		}
+		Poomine.joonista(errors);
+		if (errors == 7) {
+			tekst.setText("KAOTASID!\nTegid liigselt vigu!\nLõppskoor: "+ punktid);
+			resetGame();
+		}
+	}
+	
+	protected void joonistaInterface() {
+
 		pealkiri.setText("Poomine");
-		//muudaTekst("ogy");
 		pealkiri.setFont(Font.font("Arial Bold", 40));
-		;
 		AnchorPane.setTopAnchor(pealkiri, 10.0);
 		AnchorPane.setLeftAnchor(pealkiri, 10.0);
 
@@ -149,31 +182,25 @@ public class Main extends Application {
 		tekst.setFont(Font.font("Century Gothic", 20));
 		AnchorPane.setTopAnchor(tekst, 70.0);
 		AnchorPane.setRightAnchor(tekst, 10.0);
+		
+		// ajakuva kast ka siia teksti alla
+		ajalabel.setFont(Font.font("Century Gothic", 25));
+		AnchorPane.setTopAnchor(ajalabel, 250.0);
+		AnchorPane.setRightAnchor(ajalabel, 10.0);
 
 		// addime kõik eelneva childreniteks
-		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst);
+		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst, ajalabel);
+	}
 
-		// poomispost
-		Rectangle alus = new Rectangle(10, 460, 140, 20);
-		alus.setFill(Color.BROWN);
-		
-		Rectangle post = new Rectangle(55, 20, 20, 450);
-		post.setFill(Color.BROWN);
-		
-		Rectangle ots = new Rectangle(55, 20, 200, 20);
-		ots.setFill(Color.BROWN);
-		
-		Line osa = new Line(65, 130, 150, 30);
-		osa.setStrokeWidth(10);
-		osa.setStroke(Color.BROWN);
-		
-		Rectangle otsalla = new Rectangle(250, 20, 20, 60);
-		otsalla.setFill(Color.BROWN);
-		
-		Group poomispost = new Group();
-		poomispost.getChildren().addAll(alus, post, ots, osa, otsalla);
-		
-		joonis.getChildren().add(poomispost);
+	@Override
+	public void start(Stage lava) {
+
+		// luuakse juur
+		joonistaInterface();
+		Scene scene = new Scene(anchorpane, 600, 570, Color.WHEAT);
+
+		// panin posti joonistamise teise klassi üldse
+		Poomine.joonistaPoomispost();
 
 		/* Hetkel ei oska midagi mõistlikku peale hakata sellega
 		joonis.heightProperty().addListener(new ChangeListener<Object>() {
@@ -191,19 +218,14 @@ public class Main extends Application {
 			}
 		});
 		*/
-
-
 		vihjenupp.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
 				if (kasTöötab == true) {
 					vihjenupp.setDisable(true);
 					punktid -= VIHJEMIINUS;
 					vihje = vihjelist.get(sõnalist.indexOf(sõna));
-					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
-							+ "\nVihje: \n" + vihje + "\nValitud täht: "
-							+ pakutudtäht + "\nVigu: " + errors + "\nPunkte: " + punktid);
+					tekst.setText(tekstikast());
 					System.out.println(vihje);
 					Taimer.setAeg(Taimer.getAeg() - VIHJEMIINUSAEG);
 					
@@ -212,13 +234,10 @@ public class Main extends Application {
 		});
 		// kui start vajutad siis mis juhtub
 		start.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
-				// genereerib random sõna listist
 				resetGame(); // algväärtustame muutujad
 				kasTöötab = true; // määrame töötamise tõeseks
-				// sõnakriipsudena = "";
 				Taimer.alusta();
 				start.setDisable(true);
 				uusSona();
@@ -233,50 +252,8 @@ public class Main extends Application {
 					pakutudtäht = keyEvent.getText();
 					System.out.println(keyEvent.getText());
 					keyEvent.consume();
-
-					try {
-						if(pakutudtähed.contains(pakutudtäht)) {
-							System.out.println("Tähte "+pakutudtäht+" on juba pakutud");
-						}
-						else {
-							pakutudtähed.add(pakutudtäht);
-							if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
-								sõnakriipsudena = Kontroll.Asendakriipsud(sõna,
-									sõnakriipsudena, pakutudtäht);
-								punktid += OIGETAHT;
-							} else {
-								errors++;
-								punktid -= VALETAHT;
-								Taimer.setAeg(Taimer.getAeg()-VALETAHTAEG);
-							}
-						}
-					} catch (ValeTaheErind e) {
-						System.out
-								.println("Tekkis erind: seda tähte pole tähestikus või vajutasid shift/tab/alt etc");
-					}
-
-					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
-							+ "\nVihje: \n" + vihje + "\nValitud täht: "
-							+ pakutudtäht + "\nvigu: " + errors + "\nPunkte: " + punktid);
-
-					if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
-						// YOU WIN ehk teeb midagi
-						punktid += OIGESONA;
-						tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
-								+ "\nVihje: \n" + vihje + "\nValitud täht: "
-								+ pakutudtäht + "\nvigu: " + errors
-								+ "\nÕige!" + "\nPunkte: " + punktid);
-						//start.setDisable(false);
-						//resetGame();
-						Taimer.setAeg(Taimer.getAeg()+30);
-						uusSona();
-						
-					}
-					Poomine.joonista(errors);
-					if (errors == 7) {
-						tekst.setText("KAOTASID!\nLiiga palju erroreid!\nLõppskoor: "+ punktid);
-						resetGame();
-					}
+					täheVajutus(pakutudtäht);
+					
 				}
 			}
 		});

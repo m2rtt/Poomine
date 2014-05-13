@@ -1,10 +1,12 @@
 package application;
 
 
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 public class Poomine extends Main {
 	static Circle pea = new Circle();
@@ -15,6 +17,29 @@ public class Poomine extends Main {
 	static Line vasakjalg = new Line();
 	static Line paremjalg = new Line();
 
+	protected static void joonistaPoomispost() {
+		// poomispost
+		Rectangle alus = new Rectangle(10, 460, 140, 20);
+		alus.setFill(Color.BROWN);
+			
+		Rectangle post = new Rectangle(55, 20, 20, 450);
+		post.setFill(Color.BROWN);
+				
+		Rectangle ots = new Rectangle(55, 20, 200, 20);
+		ots.setFill(Color.BROWN);
+				
+		Line osa = new Line(65, 130, 150, 30);
+		osa.setStrokeWidth(10);
+		osa.setStroke(Color.BROWN);
+			
+		Rectangle otsalla = new Rectangle(250, 20, 20, 60);
+		otsalla.setFill(Color.BROWN);
+			
+		Group poomispost = new Group();
+		poomispost.getChildren().addAll(alus, post, ots, osa, otsalla);
+			
+		joonis.getChildren().add(poomispost);		
+	}
 	public static void resetJoonista() {
 		joonis.getChildren().removeAll(pea, nöör, keha, vasakkäsi, paremkäsi,
 				vasakjalg, paremjalg);
