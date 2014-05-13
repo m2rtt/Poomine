@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -40,7 +41,7 @@ public class Main extends Application {
 	double x = 1;
 	
 	final Label tekst = new Label("Arvatav sõna: \nVihje: \nTähed: ");
-	final Button start = new Button("Alusta");
+	final static Button start = new Button("Alusta");
 	final Button vihjenupp = new Button("Vihje");
 
 
@@ -59,13 +60,22 @@ public class Main extends Application {
         });
 	}
 	// algväärtustamine
+	
+	
 	public static void resetGame() {
+		Platform.runLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	Poomine.resetJoonista();	        
+	        }
+	   });
 		Taimer.stopp();
 		Taimer.setAeg(120);
 		resetSona();
+		start.setDisable(false);
 		kasTöötab = false;
 		errors = 0;
-		Poomine.resetJoonista();
+		
 	}
 	public static void resetSona() {
 		vihje = "";
@@ -84,7 +94,7 @@ public class Main extends Application {
 		for (int i = 0; i < sõna.length(); i++) {
 			sõnakriipsudena += "_";
 		}
-		errors = 0;
+		//errors = 0;
 		pakutudtäht = "";
 		tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
 				+ "\nVihje: \n" + vihje + "\nValitud täht: "
@@ -176,9 +186,8 @@ public class Main extends Application {
 					vihje = vihjelist.get(sõnalist.indexOf(sõna));
 					tekst.setText("Arvatav sõna: \n" + sõnakriipsudena
 							+ "\nVihje: \n" + vihje + "\nValitud täht: "
-							+ pakutudtäht + "\nF: " + errors);
+							+ pakutudtäht + "\nVigu: " + errors);
 					System.out.println(vihje);
-					System.out.println("xd");
 					Taimer.setAeg(Taimer.getAeg() - 5);
 				}
 			}
@@ -241,7 +250,6 @@ public class Main extends Application {
 					if (errors == 7) {
 						tekst.setText("KAOTASID!\nLiiga palju erroreid!");
 						resetGame();
-						start.setDisable(false);
 					}
 				}
 			}
@@ -253,6 +261,12 @@ public class Main extends Application {
 		lava.setMinHeight(600); lava.setMaxHeight(700);
 		lava.setMinWidth(550); lava.setMaxWidth(700);
 		lava.show();
+		lava.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	              System.out.println("Programm sulgub");
+	              Taimer.stopp();
+	          }
+	      });        
 	}
 	public static void main(String[] args) {
 		try {
