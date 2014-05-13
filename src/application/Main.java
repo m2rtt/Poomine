@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -24,6 +25,8 @@ import javafx.scene.text.Font;
 
 public class Main extends Application {
 
+	//Taimer ajaloendur = new Taimer();
+	static Label pealkiri = new Label("Poomismäng");
 	private int errors;
 	public String vihje = "";
 	public String sõna = "";
@@ -40,7 +43,16 @@ public class Main extends Application {
 	//private Mangija playa; // veel ei kasuta
 	//private Taimer taimer; // veel ei kasuta
 	protected static AnchorPane root;
-
+	
+	// http://java-buddy.blogspot.com/2012/06/update-ui-in-javafx-application-thread.html
+	public static void muudaTekst(final String tekst) {
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                pealkiri.setText(tekst);
+            }
+        });
+	}
 	// algväärtustamine
 	public void resetGame() {
 		vihje = "";
@@ -60,7 +72,9 @@ public class Main extends Application {
 		AnchorPane anchorpane = new AnchorPane();
 
 		// mängu nimi
-		Label pealkiri = new Label("Poomismäng");
+		//Label pealkiri = new Label("Poomismäng");
+		pealkiri.setText("Poomine");
+		//muudaTekst("ogy");
 		pealkiri.setFont(Font.font("Arial Bold", 40));
 		;
 		AnchorPane.setTopAnchor(pealkiri, 10.0);
@@ -140,6 +154,8 @@ public class Main extends Application {
 							+ "\nVihje: \n" + vihje + "\nValitud täht: "
 							+ pakutudtäht + "\nF: " + errors);
 					System.out.println(vihje);
+					System.out.println("xd");
+					Taimer.setAeg(10);
 				}
 			}
 		});
@@ -153,6 +169,7 @@ public class Main extends Application {
 				resetGame(); // algväärtustame muutujad
 				kasTöötab = true; // määrame töötamise tõeseks
 				// sõnakriipsudena = "";
+				Taimer.alusta();
 				System.out.println(sõnalist.size());
 				Random rand = new Random();
 				int arv = rand.nextInt(sõnalist.size());

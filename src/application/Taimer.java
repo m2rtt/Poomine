@@ -7,14 +7,15 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Taimer {
-	static int intervall;
+public class Taimer extends Main{
+	//static int intervall;
 	static Timer taimer;
 	static int aeg = 10;
-	
+	/*
 	public static void main(String[] args) {
 		alusta();
 	}
+	*/
 	public void stopp() {
 		taimer.cancel();
 	}
@@ -22,26 +23,31 @@ public class Taimer {
 		int delay = 1000;
 		int period = 1000;
 		taimer = new Timer();
-		intervall = getAeg();
+		//intervall = getAeg();
 		// google'i abiga loodud taimer
-		taimer.scheduleAtFixedRate(new TimerTask() {
+		taimer.schedule(new TimerTask() {
 
 			public void run() {
-				System.out.println(setIntervall());
-				aeg = setIntervall();
+				System.out.println(aeg);
+				muudaTekst(Integer.toString(aeg));
+				aeg = setIntervall();				
 
 			}
 		}, delay, period);
 	}
 
 	private static final int setIntervall() {
-		if (intervall == 1) {
+		if (aeg <= 0) {
 			taimer.cancel();
+			muudaTekst("Aeg läbi!");
+			System.out.println("Aeg läbi");
+			aeg = 10;
+			
 		}
-		return --intervall;
+		return --aeg;
 	}
-	public void setAeg(int aeg) {
-		this.aeg = aeg;
+	public static void setAeg(int x) {
+		aeg = x;
 	}
 	public static int getAeg() {
 		return aeg;
