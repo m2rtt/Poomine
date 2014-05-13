@@ -23,7 +23,7 @@ public class Taimer extends Main{
 	public static void alusta() {
 		int delay = 1000;
 		int period = 1000;
-		aeg = 120;
+		aeg = TAIMERIAEG;
 		taimer = new Timer();
 		//intervall = getAeg();
 		// google'i abiga loodud taimer
@@ -44,7 +44,7 @@ public class Taimer extends Main{
 			resetGame();
 			muudaTekst("Aeg läbi!");
 			System.out.println("Aeg läbi");
-			aeg = 120;
+			aeg = TAIMERIAEG;
 			
 		}
 		return --aeg;
