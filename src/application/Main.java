@@ -165,6 +165,7 @@ public class Main extends Application {
 			tekst.setText("KAOTASID!\nTegid liigselt vigu!\nLõppskoor: "+ punktid);
 			try {
 				Failikirjutaja.failikirjutaja();
+				Failikirjutaja.kokkuvõte();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -254,6 +255,11 @@ public class Main extends Application {
 				kasTöötab = true; // määrame töötamise tõeseks
 				Taimer.alusta();
 				start.setDisable(true);
+				try {
+					Failikirjutaja.uusmängija();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				uusSona();
 			}
 		});
