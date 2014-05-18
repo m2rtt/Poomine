@@ -1,6 +1,9 @@
 package application;
 
+import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -39,7 +42,7 @@ public class Main extends Application {
 	
 	//Taimer ajaloendur = new Taimer();
 	static Label pealkiri = new Label("Poomismäng");
-	private static int errors;
+	protected static int errors;
 	public static String vihje = "";
 	public static String sõna = "";
 	private static boolean kasTöötab = false;
@@ -63,6 +66,7 @@ public class Main extends Application {
 	final static Label ajalabel = new Label("");
 	final static Button start = new Button("Alusta");
 	final static Button vihjenupp = new Button("Vihje");
+	
 
 	static Pane joonis = new Pane();
 	//private Mangija playa; // veel ei kasuta
@@ -148,12 +152,22 @@ public class Main extends Application {
 			//start.setDisable(false);
 			//resetGame();
 			Taimer.setAeg(Taimer.getAeg()+30);
+			try {
+				Failikirjutaja.failikirjutaja();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			uusSona();
 			
 		}
 		Poomine.joonista(errors);
 		if (errors == 7) {
 			tekst.setText("KAOTASID!\nTegid liigselt vigu!\nLõppskoor: "+ punktid);
+			try {
+				Failikirjutaja.failikirjutaja();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			resetGame();
 		}
 	}
@@ -273,6 +287,7 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		try {
 			Faililugeja.faililugeja();
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
