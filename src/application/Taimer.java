@@ -39,7 +39,7 @@ public class Taimer extends Main{
 	}
 
 	private static final int setIntervall() {
-		if (aeg <= 0) {
+		if (aeg <= 0) {             //aeg nulli läheb siis tuleb mingi error
 			taimer.cancel();
 			resetGame();
 			muudaTekst("Aeg läbi!");

@@ -173,7 +173,7 @@ public class Main extends Application {
 		if (errors == 7) {
 			tekst.setText("KAOTASID!\nTegid liigselt vigu!\nLõppskoor: "+ punktid);
 			
-			final String temp = " Kokkuvõte: "+punktid+" punkti. Arvasid ära "+sõnadearv+" sõna. Tegid "+errors+" viga.";
+			final String temp = ". KOKKUVÕTE: "+punktid+" punkti. Arvasid ära "+sõnadearv+" sõna. Tegid "+errors+" viga.";
 			
 			//loome nime sisestamiseks uue akna
 			final Stage lopp = new Stage();
@@ -190,7 +190,7 @@ public class Main extends Application {
             		DataOutputStream dos = new DataOutputStream (new FileOutputStream ("statistika.dat", true));
             		
             		
-            		dos.writeBytes("Nimi: "+nimekoht.getText()+temp+"\n");
+            		dos.writeBytes("Nimi: "+nimekoht.getText()+temp+"\n\n");
             		
             		System.out.println("kirjutasin faili nimega tulemuse");
             		
@@ -230,7 +230,7 @@ public class Main extends Application {
 	protected void joonistaInterface() {
 
 		pealkiri.setText("Poomine");
-		pealkiri.setFont(Font.font("Arial Bold", 40));
+		pealkiri.setFont(Font.font("Century Gothic", 45));
 		AnchorPane.setTopAnchor(pealkiri, 10.0);
 		AnchorPane.setLeftAnchor(pealkiri, 10.0);
 
@@ -255,7 +255,7 @@ public class Main extends Application {
 		// ajakuva kast ka siia teksti alla
 		ajalabel.setFont(Font.font("Century Gothic", 25));
 		AnchorPane.setTopAnchor(ajalabel, 250.0);
-		AnchorPane.setRightAnchor(ajalabel, 10.0);
+		AnchorPane.setRightAnchor(ajalabel, 45.0);
 
 		// addime kõik eelneva childreniteks
 		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst, ajalabel);
@@ -266,7 +266,7 @@ public class Main extends Application {
 
 		// luuakse juur
 		joonistaInterface();
-		Scene scene = new Scene(anchorpane, 600, 570, Color.WHEAT);
+		Scene scene = new Scene(anchorpane, 600, 570, Color.LIGHTSTEELBLUE);
 
 		// panin posti joonistamise teise klassi üldse
 		Poomine.joonistaPoomispost();
