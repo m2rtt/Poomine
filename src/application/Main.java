@@ -15,15 +15,19 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -39,6 +43,7 @@ public class Main extends Application {
 	int VIHJEMIINUSAEG = 5; // võtab selle võrra aega maha
 	int VALETAHT = 5; // sama analoogia eelmise kahega
 	int VALETAHTAEG = 10; // -::-
+	static int sõnadearv = 0;
 	
 	//Taimer ajaloendur = new Taimer();
 	static Label pealkiri = new Label("Poomismäng");
@@ -92,7 +97,8 @@ public class Main extends Application {
 		vihjenupp.setDisable(true);
 		kasTöötab = false;
 		errors = 0;
-		punktid = 0;		
+		punktid = 0;
+		sõnadearv = 0;
 	}
 	
 	public static void resetSona() {
@@ -139,8 +145,7 @@ public class Main extends Application {
 				}
 			}
 		} catch (ValeTaheErind e) {
-			System.out
-					.println("Tekkis erind: seda tähte pole tähestikus või vajutasid shift/tab/alt etc");
+			System.out.println("Tekkis erind: seda tähte pole tähestikus või vajutasid shift/tab/alt etc");
 		}
 
 		tekst.setText(tekstikast());
@@ -148,12 +153,16 @@ public class Main extends Application {
 		if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
 			// YOU WIN ehk teeb midagi
 			punktid += OIGESONA;
+			sõnadearv++;
 			tekst.setText(tekstikast());
 			//start.setDisable(false);
 			//resetGame();
 			Taimer.setAeg(Taimer.getAeg()+30);
 			try {
-				Failikirjutaja.failikirjutaja();
+				DataOutputStream dos = new DataOutputStream (new FileOutputStream ("statistika.dat", true));
+				dos.writeBytes(sõna+"; "+punktid+"; "+errors+"\n");
+				System.out.println("kirjutasin faili2");	
+				dos.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -163,12 +172,57 @@ public class Main extends Application {
 		Poomine.joonista(errors);
 		if (errors == 7) {
 			tekst.setText("KAOTASID!\nTegid liigselt vigu!\nLõppskoor: "+ punktid);
-			try {
-				Failikirjutaja.failikirjutaja();
-				Failikirjutaja.kokkuvõte();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			
+			final String temp = " Kokkuvõte: "+punktid+" punkti. Arvasid ära "+sõnadearv+" sõna. Tegid "+errors+" viga.";
+			
+			//loome nime sisestamiseks uue akna
+			final Stage lopp = new Stage();
+            Label label = new Label("Sisesta enda nimi: ");
+            final TextField nimekoht = new TextField ();
+            Button ok = new Button("OK");
+            Button cancel = new Button("Cancel");
+            
+            ok.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    //failikirjutus nimega
+                    try {
+
+            		DataOutputStream dos = new DataOutputStream (new FileOutputStream ("statistika.dat", true));
+            		
+            		
+            		dos.writeBytes("Nimi: "+nimekoht.getText()+temp+"\n");
+            		
+            		System.out.println("kirjutasin faili nimega tulemuse");
+            		
+            		
+            		dos.close();
+                    }
+                    catch (IOException e) {
+        				e.printStackTrace();
+        			}
+                    lopp.hide();
+               
+                    
+                }
+            });
+            cancel.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    lopp.hide();
+                    
+                }
+            });
+            FlowPane pane = new FlowPane(10, 10);
+            pane.setAlignment(Pos.CENTER);
+            pane.getChildren().addAll(ok, cancel);
+            
+            VBox vBox = new VBox(10);
+            vBox.setAlignment(Pos.CENTER);
+            vBox.getChildren().addAll(label, nimekoht, pane);
+    
+            Scene stseen2 = new Scene(vBox);
+            lopp.setScene(stseen2);
+            lopp.show();
+			
 			resetGame();
 		}
 	}
@@ -256,7 +310,10 @@ public class Main extends Application {
 				Taimer.alusta();
 				start.setDisable(true);
 				try {
-					Failikirjutaja.uusmängija();
+					DataOutputStream dos = new DataOutputStream (new FileOutputStream ("statistika.dat", true));
+					dos.writeBytes("----------------- \n");
+					System.out.println("kirjutasin faili1");			
+					dos.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
