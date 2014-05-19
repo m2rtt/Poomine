@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -13,6 +15,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -22,6 +26,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -39,6 +44,7 @@ public class Main extends Application {
 	static int TAIMERIAEG = 120; // mängu alustades 120sek
 	int OIGESONA = 100; // lisab nii palju punkte
 	int OIGETAHT = 10; // -::-
+	int OIGESONAAEG = 20; // mitu sekundit lisatakse õige sõna pakkumisel
 	int VIHJEMIINUS = 10; // võtab nii palju punkte maha
 	int VIHJEMIINUSAEG = 5; // võtab selle võrra aega maha
 	int VALETAHT = 5; // sama analoogia eelmise kahega
@@ -60,17 +66,20 @@ public class Main extends Application {
 	public static Set<String> pakutudtähed = new HashSet<String>();
 	double y = 1;
 	double x = 1;
+	 // loome uue mängija
+	static Mangija uusMangija = new Mangija(); // nimi, skoor, õigesti arvatud sõnu
 	
 	public String tekstikast() {
 		return "Arvatav sõna: \n" + sõnakriipsudena
 			+ "\nVihje: \n" + vihje + "\nValitud täht: "
-			+ pakutudtäht + "\nVigu: " + errors + "\nPunkte: " + punktid;
+			+ pakutudtäht + "\nVigu: " + errors + "\nPunkte: " + uusMangija.getSkoor();
 	}
 	
 	final static Label tekst = new Label("Vilkommen!");
 	final static Label ajalabel = new Label("");
 	final static Button start = new Button("Alusta");
 	final static Button vihjenupp = new Button("Vihje");
+	final static Button edetabel = new Button("Edetabel");
 	
 
 	static Pane joonis = new Pane();
@@ -97,8 +106,7 @@ public class Main extends Application {
 		vihjenupp.setDisable(true);
 		kasTöötab = false;
 		errors = 0;
-		punktid = 0;
-		sõnadearv = 0;
+		uusMangija.mangijaReset();
 	}
 	
 	public static void resetSona() {
@@ -137,10 +145,11 @@ public class Main extends Application {
 				if (Kontroll.KasTähtOnSõnas(sõna, pakutudtäht, errors) == true) {
 					sõnakriipsudena = Kontroll.Asendakriipsud(sõna,
 						sõnakriipsudena, pakutudtäht);
-					punktid += OIGETAHT;
+					uusMangija.setSkoor(uusMangija.getSkoor() + OIGETAHT);
 				} else {
 					errors++;
-					punktid -= VALETAHT;
+					uusMangija.setSkoor(uusMangija.getSkoor() - VALETAHT);
+					
 					Taimer.setAeg(Taimer.getAeg()-VALETAHTAEG);
 				}
 			}
@@ -151,29 +160,20 @@ public class Main extends Application {
 		tekst.setText(tekstikast());
 
 		if (Kontroll.KasArvatud(sõnakriipsudena) == true) {
-			// YOU WIN ehk teeb midagi
-			punktid += OIGESONA;
-			sõnadearv++;
+			uusMangija.setSkoor(uusMangija.getSkoor() + OIGESONA);
+			uusMangija.setArvatud(uusMangija.getArvatud() + 1);
 			tekst.setText(tekstikast());
 			//start.setDisable(false);
 			//resetGame();
-			Taimer.setAeg(Taimer.getAeg()+30);
-			try {
-				DataOutputStream dos = new DataOutputStream (new FileOutputStream ("statistika.dat", true));
-				dos.writeBytes(sõna+"; "+punktid+"; "+errors+"\n");
-				System.out.println("kirjutasin faili2");	
-				dos.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			Taimer.setAeg(Taimer.getAeg() + OIGESONAAEG);
 			uusSona();
 			
 		}
 		Poomine.joonista(errors);
 		if (errors == 7) {
-			tekst.setText("KAOTASID!\nTegid liigselt vigu!\nLõppskoor: "+ punktid);
-			
-			final String temp = ". KOKKUVÕTE: "+punktid+" punkti. Arvasid ära "+sõnadearv+" sõna. Tegid "+errors+" viga.";
+			tekst.setText("KAOTASID!\nTegid liigselt vigu!\nLõppskoor: "+ uusMangija.getSkoor());
+			Taimer.stopp();
+			final String temp = ". KOKKUVÕTE: "+uusMangija.getSkoor()+" punkti. Arvasid ära "+uusMangija.getArvatud()+" sõna. Tegid "+errors+" viga.";
 			
 			//loome nime sisestamiseks uue akna
 			final Stage lopp = new Stage();
@@ -185,21 +185,15 @@ public class Main extends Application {
             ok.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
                     //failikirjutus nimega
-                    try {
-
-            		DataOutputStream dos = new DataOutputStream (new FileOutputStream ("statistika.dat", true));
-            		
-            		
-            		dos.writeBytes("Nimi: "+nimekoht.getText()+temp+"\n\n");
-            		
-            		System.out.println("kirjutasin faili nimega tulemuse");
-            		
-            		
-            		dos.close();
-                    }
-                    catch (IOException e) {
-        				e.printStackTrace();
-        			}
+                	try {
+                		uusMangija.setNimi(nimekoht.getText());
+                		System.out.println(uusMangija);
+						Edetabel.kirjutaTabelisse(uusMangija);
+                	} catch (ClassNotFoundException | IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                	resetGame();
                     lopp.hide();
                
                     
@@ -207,6 +201,7 @@ public class Main extends Application {
             });
             cancel.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
+                	resetGame();
                     lopp.hide();
                     
                 }
@@ -218,12 +213,14 @@ public class Main extends Application {
             VBox vBox = new VBox(10);
             vBox.setAlignment(Pos.CENTER);
             vBox.getChildren().addAll(label, nimekoht, pane);
-    
+            nimekoht.setMaxWidth(150);
+            
             Scene stseen2 = new Scene(vBox);
             lopp.setScene(stseen2);
+            lopp.setHeight(180);
+            lopp.setWidth(250);
+            lopp.setResizable(false);
             lopp.show();
-			
-			resetGame();
 		}
 	}
 	
@@ -246,6 +243,8 @@ public class Main extends Application {
 		AnchorPane.setRightAnchor(start, 10.0);
 		AnchorPane.setTopAnchor(vihjenupp, 40.0);
 		AnchorPane.setRightAnchor(vihjenupp, 10.0);
+		AnchorPane.setBottomAnchor(edetabel, 10.0);
+		AnchorPane.setRightAnchor(edetabel, 10.0);
 
 		// tekst mänguseisu jaoks(arvatav sõna, valesid jne)
 		tekst.setFont(Font.font("Century Gothic", 20));
@@ -258,7 +257,7 @@ public class Main extends Application {
 		AnchorPane.setRightAnchor(ajalabel, 45.0);
 
 		// addime kõik eelneva childreniteks
-		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst, ajalabel);
+		anchorpane.getChildren().addAll(joonis, start, vihjenupp, pealkiri, tekst, ajalabel, edetabel);
 	}
 
 	@Override
@@ -292,7 +291,7 @@ public class Main extends Application {
 			public void handle(ActionEvent event) {
 				if (kasTöötab == true) {
 					vihjenupp.setDisable(true);
-					punktid -= VIHJEMIINUS;
+					uusMangija.setSkoor(uusMangija.getSkoor() - VIHJEMIINUS);
 					vihje = vihjelist.get(sõnalist.indexOf(sõna));
 					tekst.setText(tekstikast());
 					System.out.println(vihje);
@@ -309,18 +308,51 @@ public class Main extends Application {
 				kasTöötab = true; // määrame töötamise tõeseks
 				Taimer.alusta();
 				start.setDisable(true);
-				try {
-					DataOutputStream dos = new DataOutputStream (new FileOutputStream ("statistika.dat", true));
-					dos.writeBytes("----------------- \n");
-					System.out.println("kirjutasin faili1");			
-					dos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 				uusSona();
 			}
 		});
+		edetabel.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				//loome nime sisestamiseks uue akna
+				final Stage edetab = new Stage();
+				ArrayList<Mangija> edetabel = new ArrayList<Mangija>();
 
+				try {
+					edetabel = Edetabel.loeTabelist();
+				} catch (ClassNotFoundException | IOException e) {
+					e.printStackTrace();
+				}
+				Collections.sort(edetabel);
+				ObservableList<Mangija> obsEdetabel = FXCollections.observableArrayList(edetabel);
+				ListView<Mangija> listView = new ListView<Mangija>(obsEdetabel);
+				
+				final Label edetabelTitle = new Label("Edetabel");
+	            Button kinni = new Button("Sulge");
+	            
+	            kinni.setOnAction(new EventHandler<ActionEvent>() {
+	                public void handle(ActionEvent event) {
+	                    edetab.hide();
+	                    
+	                }
+	            });
+	            
+	            FlowPane pane = new FlowPane(10, 10);
+	            pane.setAlignment(Pos.CENTER);
+	            pane.getChildren().addAll(kinni);
+	            
+	            VBox vBox = new VBox(10);
+	            vBox.setAlignment(Pos.CENTER);
+	            vBox.getChildren().addAll(edetabelTitle, listView, pane);
+	            
+	            Scene stseen3 = new Scene(vBox);
+	            edetab.setScene(stseen3);
+	            edetab.setHeight(500);
+	            edetab.setWidth(350);
+	            edetab.setResizable(false);
+	            edetab.show();
+			}
+		});
 		// kui tähti vajutatakse siis mis teeb
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override

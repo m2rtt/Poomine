@@ -1,9 +1,5 @@
 package application;
 
-/*
- * Esialgu jätab selle kõrvale ja lisab kolmandaks projektiks
- */
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,11 +7,7 @@ public class Taimer extends Main{
 	//static int intervall;
 	static Timer taimer;
 	static int aeg = -1;
-	/*
-	public static void main(String[] args) {
-		alusta();
-	}
-	*/
+
 	public static void stopp() {
 		if(aeg != -1)
 			taimer.cancel();
@@ -39,7 +31,7 @@ public class Taimer extends Main{
 	}
 
 	private static final int setIntervall() {
-		if (aeg <= 0) {             //aeg nulli läheb siis tuleb mingi error
+		if (aeg <= 0) {         
 			taimer.cancel();
 			resetGame();
 			muudaTekst("Aeg läbi!");
