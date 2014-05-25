@@ -28,3 +28,42 @@ ajalugu;minevik
 muusika;hea kuulata
 kell;näitab aega
 dokument;tähtis paber
+banaan;puuvili
+õun;puuvili
+porgand;juurvili
+maasikas;mammu
+hambahari;puhastab hambaid
+gloobus;maakera koopia
+äike;kõu
+mandariin;puuvili
+kiivi;puuvili
+apelsin;puuvili
+twitter;säutsud seal
+facebook;lõustaraamat
+moodle;õpikeskkond
+Postimees;ajaleht
+Delfi;uudistesait
+sirel;põõsas
+võilill;kollane lilleke
+euro;raha
+botased;kuluvad suht kiirelt
+mikrokiip;arvutis on neid palju
+prillid;okulaarid
+pähkel;sarapuu ...
+matrikkel;sinna kantakse hinded
+ruuter;jagab netti
+suusad;talvel võib vaja minna
+hammasratas;jalgrattal on neid mitu
+rätik;kuivatusvahend
+sünnipäev;on aastas korra
+plaaster;esmaabivahend
+foto;pilt
+ämblik;kaheksa jalaga
+kaheksajalg;8
+normaalne;tavaline
+medal;võistlustel jagatakse
+karikas;auhind
+pokaal;sealt juuakse veini
+kilekott;plastist kotike
+Brasiilia;jalka MM
+ookean;suur veekogu
