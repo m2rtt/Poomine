@@ -67,3 +67,34 @@ pokaal;sealt juuakse veini
 kilekott;plastist kotike
 Brasiilia;jalka MM
 ookean;suur veekogu
+triikraud;kortsueemaldaja
+prillid;kui lugeda ei seleta
+seebikivi;naatriumhüdroksiid
+ruupor;teisisõnu mögafon
+vorst;kontsiita
+neigaus;staarmetroseksuaal
+aabits;koolilapse esimene õpik
+põder;sageli aetakse segi soomlasega
+raha;see, mida tudengitel kunagi pole
+koit;enne päikesetõusu
+eha;pärast päikeseloojangut
+kasvuhoone;hoiab taimed soojas
+rong;sõidab rööbastel
+lennuk;metallist lind
+jaanalind;pistab pea liiva alla
+kaamel;kannab endaga vett kaasas
+naba;auk kõhus
+kohtunik;vilistab ja jagab kaarte
+juku;figureerib anekdootides
+koer;kipub haukuma
+õunamoos;pudru peal hea
+kanafilee;HD Taneli lemmiktoit
+generaator;teeb elektrit
+latipats;õige magus
+alecoq;teeb karastusjooke
+rasvakriit;joonistusvahend
+plastiliin;pehme voolimismaterjal
+fideelia;staarfeminist
+metsmaasikas;õige magus ja punane
+valgusfoor;automaatne liikluskorraldaja
+leopold;kõige suurem sõber
